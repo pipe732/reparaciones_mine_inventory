@@ -38,7 +38,7 @@ DOC_LABELS = {
 DOC_HINTS = {
     "CC": "La Cédula de Ciudadanía debe tener entre 6 y 10 dígitos.",
     "CE": (
-        "La Cédula de Extranjería debe tener entre 6 y 12 caracteres " "alfanuméricos."
+        "La Cédula de Extranjería debe tener entre 6 y 12 caracteres alfanuméricos."
     ),
     "PP": "El Pasaporte debe tener entre 5 y 9 caracteres alfanuméricos.",
     "TI": "La Tarjeta de Identidad debe tener 10 u 11 dígitos.",
@@ -179,7 +179,16 @@ def registro_view(request):
             "nombre_programa": nombre_programa,
         }
 
-        if not all([username, email, tipo_documento, documento, password1, password2]):
+        if not all(
+            [
+                username,
+                email,
+                tipo_documento,
+                documento,
+                password1,
+                password2,
+            ]
+        ):
             messages.error(request, "Completa todos los campos obligatorios.")
             return render(request, "registro.html", ctx)
 
@@ -189,7 +198,10 @@ def registro_view(request):
             return render(request, "registro.html", ctx)
 
         if len(password1) < 8:
-            messages.error(request, "La contraseña debe tener al menos 8 caracteres.")
+            messages.error(
+                request,
+                "La contraseña debe tener al menos " "8 caracteres.",
+            )
             return render(request, "registro.html", ctx)
 
         if password1 != password2:
@@ -197,7 +209,10 @@ def registro_view(request):
             return render(request, "registro.html", ctx)
 
         if Usuario.objects.filter(numero_documento=documento).exists():
-            messages.error(request, "Ya existe un usuario con ese número de documento.")
+            messages.error(
+                request,
+                "Ya existe un usuario con ese " "número de documento.",
+            )
             return render(request, "registro.html", ctx)
 
         if Usuario.objects.filter(correo=email).exists():
@@ -312,7 +327,10 @@ def nueva_contrasena_view(request, uid, token):
         or usuario.reset_token != token
         or time.time() > usuario.reset_token_expira
     ):
-        messages.error(request, "El enlace ya fue usado o expiró. Solicita uno nuevo.")
+        messages.error(
+            request,
+            "El enlace ya fue usado o expiró. " "Solicita uno nuevo.",
+        )
         return redirect("olvido_contrasena")
 
     if request.method == "POST":
@@ -320,7 +338,10 @@ def nueva_contrasena_view(request, uid, token):
         password2 = request.POST.get("password2", "")
 
         if len(password1) < 8:
-            messages.error(request, "La contraseña debe tener al menos 8 caracteres.")
+            messages.error(
+                request,
+                "La contraseña debe tener al menos " "8 caracteres.",
+            )
             return render(request, "nueva_contrasena.html")
 
         if password1 != password2:
@@ -338,7 +359,10 @@ def nueva_contrasena_view(request, uid, token):
             ]
         )
 
-        messages.success(request, "¡Contraseña actualizada! Ya puedes iniciar sesión.")
+        messages.success(
+            request,
+            "¡Contraseña actualizada! " "Ya puedes iniciar sesión.",
+        )
         return redirect("login")
 
     return render(request, "nueva_contrasena.html")
@@ -388,7 +412,10 @@ def lista_usuarios_view(request):
             return redirect("lista_usuarios")
 
         if Usuario.objects.filter(correo=correo).exclude(numero_documento=doc).exists():
-            messages.error(request, "Ese correo ya está en uso por otro usuario.")
+            messages.error(
+                request,
+                "Ese correo ya está en uso por " "otro usuario.",
+            )
             return redirect("lista_usuarios")
 
         if rol_id not in ROLES_VALIDOS:
@@ -413,7 +440,8 @@ def lista_usuarios_view(request):
         if nueva_password:
             if len(nueva_password) < 8:
                 messages.error(
-                    request, "La nueva contraseña debe tener al menos 8 caracteres."
+                    request,
+                    "La nueva contraseña debe tener al menos " "8 caracteres.",
                 )
                 return redirect("lista_usuarios")
             usuario.password = make_password(nueva_password)
@@ -422,7 +450,8 @@ def lista_usuarios_view(request):
         usuario.save(update_fields=campos)
 
         messages.success(
-            request, f"Usuario {usuario.nombre_completo} actualizado correctamente."
+            request,
+            "Usuario " f"{usuario.nombre_completo} actualizado correctamente.",
         )
         return redirect("lista_usuarios")
 
@@ -617,7 +646,9 @@ def perfil_view(request):
                     .exclude(numero_documento=doc)
                     .exists()
                 ):
-                    errores["correo"] = "Este correo ya está en uso por otro usuario."
+                    errores["correo"] = (
+                        "Este correo ya está en uso por " "otro usuario."
+                    )
 
             if not errores:
                 usuario.nombre_completo = nombre
@@ -655,7 +686,10 @@ def perfil_view(request):
             if not errores:
                 usuario.password = make_password(nueva)
                 usuario.save(update_fields=["password"])
-                messages.success(request, "Contraseña actualizada correctamente.")
+                messages.success(
+                    request,
+                    "Contraseña actualizada correctamente.",
+                )
                 return redirect("perfil")
 
         elif accion_activa == "guardar_config":
