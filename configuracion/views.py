@@ -64,7 +64,7 @@ def configuracion_view(request):
         _actualizar_env('DB_ENGINE', almacenamiento)
         if database_url:
             _actualizar_env('DATABASE_URL', database_url)
-        else:
+        elif almacenamiento == 'nube':
             _actualizar_env('DATABASE_URL', '')
         _forzar_recarga()
 

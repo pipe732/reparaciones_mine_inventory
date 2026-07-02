@@ -43,6 +43,11 @@ def correr_migraciones():
 def asegurar_columnas_compatibles():
     from django.db import connection
 
+    # En SQLite, la base de datos se borra y crea desde cero con las migraciones,
+    # por lo que estas columnas ya existen. SQLite no soporta 'ADD COLUMN IF NOT EXISTS'.
+    if connection.vendor == 'sqlite':
+        return
+
     with connection.cursor() as cursor:
         cursor.execute("ALTER TABLE almacen ADD COLUMN IF NOT EXISTS detalles text")
         cursor.execute("ALTER TABLE almacen ADD COLUMN IF NOT EXISTS capacidad integer")
@@ -74,7 +79,10 @@ def poblar_datos():
 
     def borrar_tablas():
         with connection.cursor() as cursor:
-            cursor.execute("SET CONSTRAINTS ALL DEFERRED")
+            if connection.vendor == 'sqlite':
+                cursor.execute("PRAGMA foreign_keys = OFF;")
+            else:
+                cursor.execute("SET CONSTRAINTS ALL DEFERRED")
 
         for model in [
             DetalleMovimiento,
