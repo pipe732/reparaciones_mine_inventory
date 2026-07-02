@@ -3,8 +3,11 @@ from django.db import models
 
 class Almacen(models.Model):
     id_almacen = models.AutoField(primary_key=True)
-    nombre_almacen = models.CharField(max_length=150)
-    ubicacion = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=150)
+    ubicacion = models.CharField(max_length=255, blank=True, null=True)
+    detalles = models.TextField(blank=True, null=True)
+    capacidad = models.IntegerField(blank=True, null=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "almacen"
@@ -12,12 +15,15 @@ class Almacen(models.Model):
         verbose_name_plural = "Almacenes"
 
     def __str__(self):
-        return self.nombre_almacen
+        return self.nombre
 
 
 class Estante(models.Model):
     id_estante = models.AutoField(primary_key=True)
-    codigo_estante = models.CharField(max_length=50, unique=True)
+    codigo = models.CharField(max_length=50, unique=True)
+    detalles = models.TextField(blank=True, null=True)
+    capacidad = models.IntegerField(blank=True, null=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
     almacen = models.ForeignKey(
         Almacen,
         on_delete=models.CASCADE,
@@ -31,4 +37,4 @@ class Estante(models.Model):
         verbose_name_plural = "Estantes"
 
     def __str__(self):
-        return self.codigo_estante
+        return self.codigo

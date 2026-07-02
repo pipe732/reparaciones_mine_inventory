@@ -21,9 +21,6 @@ class Usuario(models.Model):
         on_delete=models.CASCADE,
         related_name="perfil_usuario",
     )
-    # id_rol(fk) en el MER: se deja como choices simples. Si más adelante
-    # necesitas roles administrables desde BD, se cambia a FK a un
-    # modelo Rol aparte.
     id_rol = models.CharField(
         max_length=20,
         choices=Rol.choices,

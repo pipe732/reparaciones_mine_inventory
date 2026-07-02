@@ -1,1 +1,0 @@
-# reparaciones_mine_inventory

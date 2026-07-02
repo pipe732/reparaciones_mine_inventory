@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-dismissible fade show d-flex align-items-center gap-2 alert-custom" role="alert">
+  {% if message.tags == 'error' %}
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.2">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+  {% else %}
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.2">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+    <polyline points="22 4 12 14.01 9 11.01" />
+  </svg>
+  {% endif %}
+  <span>{{ message }}</span>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- ══ CABECERA ══ -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h4 class="fw-bold mb-0">Estado Actual de Herramientas</h4>
+    <p class="text-muted small mb-0">Visualice la disponibilidad y el estado técnico en tiempo real de todo el inventario.</p>
+  </div>
+</div>
+
+<div class="card table-card p-3">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <span class="card-title">
+      <i class="bi bi-shield-check me-2 text-danger"></i>
+      Estado Técnico y Disponibilidad
+    </span>
+    <span class="badge-count">
+      {{ herramientas|length }} Herramienta{{ herramientas|length|pluralize }}
+    </span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table-app datatable-custom" id="estado-actual-table">
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Herramienta / Código SKU</th>
+          <th>Ubicación / Estante</th>
+          <th>Estado en Mantenimiento</th>
+          <th>Nivel / Criticidad</th>
+          <th class="text-center">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for h in herramientas %}
+        <tr>
+          <td>
+            {% if h.imagen %}
+            <img src="{{ h.imagen.url }}" alt="{{ h.nombre }}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;">
+            {% else %}
+            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="width: 40px; height: 40px;">
+              <i class="bi bi-tools"></i>
+            </div>
+            {% endif %}
+          </td>
+          <td>
+            <div class="fw-bold">{{ h.nombre }}</div>
+            <span class="sku-text">{{ h.codigo_sku }}</span>
+          </td>
+          <td>
+            {% if h.estante %}
+            <span class="badge bg-light text-dark border">{{ h.estante.almacen.nombre }} · Estante {{ h.estante.codigo }}</span>
+            {% else %}
+            <span class="text-muted small">—</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if h.en_mantenimiento %}
+            <span class="badge bg-warning text-dark d-inline-flex align-items-center gap-1">
+              <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" style="width: 8px; height: 8px;"></span>
+              {{ h.estado_mantenimiento }}
+            </span>
+            {% else %}
+            <span class="badge bg-success text-white d-inline-flex align-items-center gap-1">
+              <i class="bi bi-check-circle-fill"></i>
+              Disponible
+            </span>
+            {% endif %}
+          </td>
+          <td>
+            {% if h.en_mantenimiento %}
+            <span class="badge-state {% if h.estado_nivel == 'danger' %}badge-rechazada{% elif h.estado_nivel == 'warning' %}badge-pendiente{% else %}badge-aprobada{% endif %}">
+              {{ h.estado_nivel|upper }}
+            </span>
+            {% else %}
+            <span class="badge-state badge-aprobada">BAJO</span>
+            {% endif %}
+          </td>
+          <td class="text-center">
+            {% if h.en_mantenimiento %}
+            <a href="{% url 'mantenimiento:mantenimiento_detail' h.mantenimiento_id %}" class="btn btn-outline-danger btn-sm">
+              Ver Detalle Mantenimiento
+            </a>
+            {% else %}
+            <form method="POST" action="{% url 'mantenimiento:mantenimiento_lista' %}">
+              {% csrf_token %}
+              <input type="hidden" name="accion" value="crear">
+              <input type="hidden" name="herramienta" value="{{ h.pk }}">
+              <input type="hidden" name="tipo_mantenimiento" value="Correctivo">
+              <input type="hidden" name="descripcion" value="Ingreso manual desde vista de disponibilidad.">
+              <input type="hidden" name="fecha_ingreso" value="{% now 'Y-m-d\TH:i' %}">
+              <button type="submit" class="btn btn-danger btn-sm">
+                Enviar a Mantenimiento
+              </button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-4 text-muted">
+            No hay herramientas registradas en el inventario.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

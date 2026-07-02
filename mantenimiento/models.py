@@ -69,3 +69,32 @@ class BitacoraEstado(models.Model):
 
     def __str__(self):
         return f"Bitácora #{self.id_bitacora_estado} - {self.estado}"
+
+
+class TipoEstado(models.Model):
+    id_tipo_estado = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100, unique=True)
+    nivel = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "tipo_estado"
+        verbose_name = "Tipo de Estado"
+        verbose_name_plural = "Tipos de Estado"
+
+    def __str__(self):
+        return self.nombre
+
+
+class TipoMantenimiento(models.Model):
+    id_tipo_mantenimiento = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100, unique=True)
+    descripcion = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = "tipo_mantenimiento"
+        verbose_name = "Tipo de Mantenimiento"
+        verbose_name_plural = "Tipos de Mantenimiento"
+
+    def __str__(self):
+        return self.nombre
+
