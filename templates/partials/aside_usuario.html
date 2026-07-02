@@ -1,4 +1,15 @@
 <aside>
+  <style>
+    /* Burlar cache y forzar contraste del link activo */
+    aside .bg-white.bg-opacity-10 {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+    aside .bg-white.bg-opacity-10 .nav-icon {
+      opacity: 1 !important;
+      stroke: #ffffff !important;
+    }
+  </style>
   <div class="aside-header">
     <i class="bi bi-cloud-haze2-fill" style="font-size: 1rem; opacity: 0.6"></i>
     <span class="aside-brand-name">Mine</span>
@@ -19,7 +30,7 @@
     <!-- Principal → Mis Préstamos (es la página principal del usuario) -->
     <a href="{% url 'home_usuario' %}"
       class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded mx-2 fw-medium
-              {% if request.resolver_match.url_name == 'home_usuario' %}bg-white bg-opacity-10 text-white border-start border-danger border-3{% else %}text-white-50{% endif %}"
+              {% if request.resolver_match.url_name == 'home_usuario' %}bg-white bg-opacity-10 text-white border-start border-danger border-2{% else %}text-white-50{% endif %}"
       style="font-size:.88rem;">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <rect x="3" y="3" width="7" height="7" />
@@ -33,7 +44,7 @@
     <!-- Mis Préstamos -->
     <a href="{% url 'prestamo_usuario' %}"
       class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded mx-2 fw-medium
-              {% if request.resolver_match.url_name == 'prestamo_usuario' %}bg-white bg-opacity-10 text-white border-start border-danger border-3{% else %}text-white-50{% endif %}"
+              {% if request.resolver_match.url_name == 'prestamo_usuario' %}bg-white bg-opacity-10 text-white border-start border-danger border-2{% else %}text-white-50{% endif %}"
       style="font-size:.88rem;">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <polyline points="9 10 4 15 9 20" />
@@ -54,7 +65,7 @@
 
     <a href="{% url 'login' %}"
       class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded mx-2 fw-medium
-              {% if request.resolver_match.url_name == 'login' %}bg-white bg-opacity-10 text-white border-start border-danger border-3{% else %}text-white-50{% endif %}"
+              {% if request.resolver_match.url_name == 'login' %}bg-white bg-opacity-10 text-white border-start border-danger border-2{% else %}text-white-50{% endif %}"
       style="font-size:.88rem;">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />

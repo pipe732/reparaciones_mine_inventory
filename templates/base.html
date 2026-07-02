@@ -37,7 +37,7 @@
 
     {# ── Aside condicional según rol ── #}
     {% with rol=request.session.usuario_rol|default:"" %}
-    {% if rol == "Administrador" or rol == "Admin" %}
+    {% if rol|upper == "ADMIN" or rol|upper == "ADMINISTRADOR" or rol|upper == "INSTRUCTOR" or rol|upper == "ALMACENISTA" %}
     {% include "partials/aside_admin.html" %}
     {% else %}
     {% include "partials/aside_usuario.html" %}
