@@ -13,6 +13,9 @@ globals()["urlpatterns"] = [
         views.nueva_contrasena_view,
         name="nueva_contrasena",
     ),
+    path("home/", views.home_view, name="home"),
+    path("home-usuario/", views.home_usuario_view, name="home_usuario"),
+    path("reportes/", views.reportes_view, name="reportes"),
     path("usuarios/", views.lista_usuarios_view, name="lista_usuarios"),
     path(
         "usuarios/<str:numero_documento>/json/",

@@ -114,7 +114,7 @@ def login_view(request):
 
             return render(request, "login.html", context)
 
-        if not check_password(password, usuario.password):
+        if not check_password(password, usuario.user.password):
             messages.error(request, "Documento o contraseña incorrectos.")
             context = {
                 "tipo_documento": tipo_documento,
@@ -125,10 +125,10 @@ def login_view(request):
 
         request.session["usuario_documento"] = usuario.numero_documento
         request.session["usuario_nombre"] = usuario.nombre_completo
-        request.session["usuario_rol"] = usuario.rol
+        request.session["usuario_rol"] = usuario.id_rol
         request.session["usuario_tipo_documento"] = usuario.tipo_documento
 
-        rol = usuario.rol.strip().lower()
+        rol = usuario.id_rol.strip().lower()
         if rol in ("administrador", "instructor"):
             return redirect("home")
         return redirect("home_usuario")
@@ -241,10 +241,10 @@ def registro_view(request):
 
         request.session["usuario_documento"] = usuario.numero_documento
         request.session["usuario_nombre"] = usuario.nombre_completo
-        request.session["usuario_rol"] = usuario.rol
+        request.session["usuario_rol"] = usuario.id_rol
         request.session["usuario_tipo_documento"] = usuario.tipo_documento
 
-        if usuario.rol.strip().lower() in ("administrador", "instructor"):
+        if usuario.id_rol.strip().lower() in ("administrador", "admin", "instructor"):
             return redirect("home")
         return redirect("home_usuario")
 
@@ -273,9 +273,9 @@ def olvido_contrasena_view(request):
 
         # Generar token y guardarlo en la base de datos (no en sesión)
         token = get_random_string(40)
-        usuario.reset_token = token
-        usuario.reset_token_expira = time.time() + 900
-        usuario.save(update_fields=["reset_token", "reset_token_expira"])
+        # usuario.reset_token = token
+        # usuario.reset_token_expira = time.time() + 900
+        # usuario.save(update_fields=["reset_token", "reset_token_expira"])
 
         uid = urlsafe_base64_encode(force_bytes(usuario.numero_documento))
         link = request.build_absolute_uri(
@@ -322,16 +322,16 @@ def nueva_contrasena_view(request, uid, token):
         return redirect("olvido_contrasena")
 
     # Validar token guardado en base de datos
-    if (
-        not usuario.reset_token
-        or usuario.reset_token != token
-        or time.time() > usuario.reset_token_expira
-    ):
-        messages.error(
-            request,
-            "El enlace ya fue usado o expiró. " "Solicita uno nuevo.",
-        )
-        return redirect("olvido_contrasena")
+    # if (
+    #     not usuario.reset_token
+    #     or usuario.reset_token != token
+    #     or time.time() > usuario.reset_token_expira
+    # ):
+    #     messages.error(
+    #         request,
+    #         "El enlace ya fue usado o expiró. " "Solicita uno nuevo.",
+    #     )
+    #     return redirect("olvido_contrasena")
 
     if request.method == "POST":
         password1 = request.POST.get("password1", "")
@@ -348,12 +348,10 @@ def nueva_contrasena_view(request, uid, token):
             messages.error(request, "Las contraseñas no coinciden.")
             return render(request, "nueva_contrasena.html")
 
-        usuario.password = make_password(password1)
-        usuario.reset_token = ""
-        usuario.reset_token_expira = 0
+        usuario.user.set_password(password1)
+        usuario.user.save()
         usuario.save(
             update_fields=[
-                "password",
                 "reset_token",
                 "reset_token_expira",
             ]
@@ -373,16 +371,198 @@ def nueva_contrasena_view(request, uid, token):
 # ─────────────────────────────────────────────────────────────
 @sesion_requerida
 @login_required
+def home_usuario_view(request):
+    """Página principal para usuarios normales (aprendices, etc.)"""
+    if not request.session.get("usuario_documento"):
+        return redirect("login")
+
+    usuario_doc = request.session.get("usuario_documento")
+    usuario = Usuario.objects.get(numero_documento=usuario_doc)
+
+    from prestamo.models import Prestamo
+
+    prestamos = Prestamo.objects.filter(usuario=usuario)
+
+    context = {
+        "usuario": usuario,
+        "prestamos": prestamos,
+    }
+    return render(request, "usuario/home_usuario.html", context)
+
+
 def home_view(request):
+    """Página principal - redirige según el rol"""
+    if not request.session.get("usuario_documento"):
+        return redirect("login")
+
     rol = (request.session.get("usuario_rol") or "").strip().lower()
-    if rol in ("administrador", "admin"):
-        return redirect("home")
+    if rol in ("administrador", "admin", "instructor"):
+        from inventario.models import Herramienta, CategoriaHerramienta, Inventario
+        from prestamo.models import Prestamo, DetallePrestamo, DevolucionHerramienta
+        from django.db.models import Sum
+        from django.utils import timezone
+        from datetime import timedelta
+
+        # 1. Total herramientas and categories
+        total_productos = Herramienta.objects.count()
+        total_categorias = CategoriaHerramienta.objects.count()
+
+        # 2. Loan counts
+        prestamos_activos_count = Prestamo.objects.filter(id_estado="APROBADO").count()
+
+        limite_vencimiento = timezone.now() - timedelta(days=7)
+        prestamos_vencidos_count = Prestamo.objects.filter(
+            id_estado="APROBADO", fecha_solicitud__lt=limite_vencimiento
+        ).count()
+
+        devoluciones_pendientes_count = Prestamo.objects.filter(
+            id_estado="PENDIENTE"
+        ).count()
+
+        # 3. Recent loans emulated for template
+        prestamos_qs = (
+            Prestamo.objects.select_related("usuario")
+            .prefetch_related("detalles__herramienta")
+            .order_by("-fecha_solicitud")[:5]
+        )
+        prestamos_recientes = []
+        for p in prestamos_qs:
+            items = []
+            for d in p.detalles.all():
+
+                class FakeProducto:
+                    def __init__(self, nombre):
+                        self.nombre = nombre
+
+                class FakeItem:
+                    def __init__(self, producto, cantidad):
+                        self.producto = producto
+                        self.cantidad = cantidad
+
+                items.append(
+                    FakeItem(FakeProducto(d.herramienta.nombre_herramienta), d.cantidad)
+                )
+
+            class FakeItemsRelation:
+                def __init__(self, items_list):
+                    self.items_list = items_list
+
+                def all(self):
+                    return self.items_list
+
+            class FakePrestamo:
+                def __init__(self, p_obj, items_relation):
+                    self.id = p_obj.id_prestamo
+                    self.usuario = p_obj.usuario.nombre_completo
+                    if p_obj.id_estado == "APROBADO":
+                        self.estado = "activo"
+                    elif p_obj.id_estado == "DEVUELTO":
+                        self.estado = "devuelto"
+                    else:
+                        self.estado = p_obj.id_estado.lower()
+                    self.fecha_prestamo = p_obj.fecha_solicitud
+                    self.items = items_relation
+
+            prestamos_recientes.append(FakePrestamo(p, FakeItemsRelation(items)))
+
+        # 4. Recent returns emulated for template
+        devoluciones_qs = DevolucionHerramienta.objects.select_related(
+            "detalle_prestamo__prestamo__usuario", "herramienta"
+        ).order_by("-fecha_devolucion")[:5]
+        devoluciones_recientes = []
+        for d_obj in devoluciones_qs:
+
+            class FakeDevolucionPrestamo:
+                def __init__(self, prestamo_obj):
+                    self.id = prestamo_obj.id_prestamo
+                    self.usuario = prestamo_obj.usuario.nombre_completo
+
+            class FakeDevolucion:
+                def __init__(self, d_obj):
+                    self.prestamo = FakeDevolucionPrestamo(
+                        d_obj.detalle_prestamo.prestamo
+                    )
+                    self.fecha_creacion = d_obj.fecha_devolucion
+                    self.devolucion_total = True
+                    self.estado = "aprobada"
+                    self.get_estado_display = "Aprobada"
+
+            devoluciones_recientes.append(FakeDevolucion(d_obj))
+
+        # 5. Stock per category
+        stock_por_categoria = []
+        categories = CategoriaHerramienta.objects.all()
+        for cat in categories:
+            total_stock = (
+                Inventario.objects.filter(
+                    herramienta__categoria_herramienta=cat
+                ).aggregate(total=Sum("cantidad"))["total"]
+                or 0
+            )
+
+            class FakeCategoryStock:
+                def __init__(self, nombre, total_stock):
+                    self.nombre = nombre
+                    self.total_stock = total_stock
+
+            stock_por_categoria.append(FakeCategoryStock(cat.descripcion, total_stock))
+
+        max_stock = max([c.total_stock for c in stock_por_categoria] + [1])
+
+        # 6. Recent products emulated for template
+        tools_qs = Herramienta.objects.select_related("categoria_herramienta").order_by(
+            "-creado_en"
+        )[:5]
+        productos_recientes = []
+        for h in tools_qs:
+            stock = (
+                Inventario.objects.filter(herramienta=h).aggregate(
+                    total=Sum("cantidad")
+                )["total"]
+                or 0
+            )
+
+            class FakeCategory:
+                def __init__(self, nombre):
+                    self.nombre = nombre
+
+            class FakeProduct:
+                def __init__(self, h_obj, stock_val):
+                    self.codigo_sku = h_obj.codigo_sku
+                    self.nombre = h_obj.nombre_herramienta
+                    self.descripcion = h_obj.descripcion
+                    self.categoria = FakeCategory(
+                        h_obj.categoria_herramienta.descripcion
+                    )
+                    self.stock = stock_val
+                    self.actualizado_en = h_obj.creado_en
+
+            productos_recientes.append(FakeProduct(h, stock))
+
+        context = {
+            "total_productos": total_productos,
+            "total_categorias": total_categorias,
+            "prestamos_activos_count": prestamos_activos_count,
+            "prestamos_vencidos_count": prestamos_vencidos_count,
+            "devoluciones_pendientes_count": devoluciones_pendientes_count,
+            "prestamos_recientes": prestamos_recientes,
+            "devoluciones_recientes": devoluciones_recientes,
+            "stock_por_categoria": stock_por_categoria,
+            "max_stock": max_stock,
+            "productos_recientes": productos_recientes,
+        }
+        return render(request, "usuario/pagina_principal.html", context)
     return redirect("home_usuario")
+
+
+def reportes_view(request):
+    """Vista de reportes (placeholder)"""
+    messages.info(request, "El módulo de reportes está en desarrollo.")
+    return redirect("home")
 
 
 # ─────────────────────────────────────────────────────────────
 #  LISTA DE USUARIOS — solo Admin
-# ─────────────────────────────────────────────────────────────
 @admin_required
 def lista_usuarios_view(request):
 
@@ -433,9 +613,9 @@ def lista_usuarios_view(request):
         usuario.nombre_completo = nombre
         usuario.correo = correo
         usuario.telefono = telefono
-        usuario.numero_ficha = numero_ficha
-        usuario.nombre_programa = nombre_programa
-        usuario.rol = rol_id
+        # usuario.numero_ficha = numero_ficha
+        # usuario.nombre_programa = nombre_programa
+        usuario.id_rol = rol_id
 
         if nueva_password:
             if len(nueva_password) < 8:
@@ -444,8 +624,8 @@ def lista_usuarios_view(request):
                     "La nueva contraseña debe tener al menos " "8 caracteres.",
                 )
                 return redirect("lista_usuarios")
-            usuario.password = make_password(nueva_password)
-            campos.append("password")
+            usuario.user.set_password(nueva_password)
+            usuario.user.save()
 
         usuario.save(update_fields=campos)
 
@@ -535,21 +715,9 @@ def detalle_usuario_json(request, numero_documento):
         "nombre_completo": usuario.nombre_completo,
         "correo": usuario.correo,
         "telefono": usuario.telefono,
-        "numero_ficha": usuario.numero_ficha,
-        "nombre_programa": usuario.nombre_programa,
         "tipo_documento_display": usuario.get_tipo_documento_display(),
         "tipo_documento": usuario.tipo_documento,
-        "rol": usuario.rol,
-        "destinado": (usuario.destinado.nombre_completo if usuario.destinado else None),
-        "destinado_doc": (
-            usuario.destinado.numero_documento if usuario.destinado else None
-        ),
-        "solicitado": (
-            usuario.solicitado.nombre_completo if usuario.solicitado else None
-        ),
-        "solicitado_doc": (
-            usuario.solicitado.numero_documento if usuario.solicitado else None
-        ),
+        "rol": usuario.id_rol,
         "prestamos_totales": prestamos_qs.count(),
         "prestamos_activos": prestamos_qs.filter(estado="activo").count(),
         "prestamos_parciales": prestamos_qs.filter(estado="parcial").count(),
@@ -654,8 +822,8 @@ def perfil_view(request):
                 usuario.nombre_completo = nombre
                 usuario.correo = correo
                 usuario.telefono = telefono
-                usuario.numero_ficha = numero_ficha
-                usuario.nombre_programa = nombre_programa
+                # usuario.numero_ficha = numero_ficha
+                # usuario.nombre_programa = nombre_programa
                 usuario.save(
                     update_fields=[
                         "nombre_completo",
@@ -674,7 +842,7 @@ def perfil_view(request):
             nueva = request.POST.get("password_nueva", "")
             confirma = request.POST.get("password_confirma", "")
 
-            if not check_password(actual, usuario.password):
+            if not check_password(actual, usuario.user.password):
                 errores["password_actual"] = "La contraseña actual es incorrecta."
             if len(nueva) < 8:
                 errores["password_nueva"] = (
@@ -684,8 +852,8 @@ def perfil_view(request):
                 errores["password_confirma"] = "Las contraseñas no coinciden."
 
             if not errores:
-                usuario.password = make_password(nueva)
-                usuario.save(update_fields=["password"])
+                usuario.user.set_password(nueva)
+                usuario.user.save()
                 messages.success(
                     request,
                     "Contraseña actualizada correctamente.",

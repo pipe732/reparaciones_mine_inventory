@@ -2,9 +2,19 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from inventario.models import Herramienta, PersonaRecaudo
+from inventario.models import Herramienta
+try:
+    from inventario.models import PersonaRecaudo
+except ImportError:
+    PersonaRecaudo = None
+
 from usuario.models import Usuario
-from .forms import HerramientaForm, PersonaRecaudoForm
+
+try:
+    from .forms import HerramientaForm, PersonaRecaudoForm
+except ImportError:
+    HerramientaForm = None
+    PersonaRecaudoForm = None
 
 
 @login_required

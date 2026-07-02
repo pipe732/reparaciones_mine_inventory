@@ -3,7 +3,7 @@ from django.db import models
 
 class Almacen(models.Model):
     id_almacen = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=150, db_column='nombre_almacen')
     ubicacion = models.CharField(max_length=255, blank=True, null=True)
     detalles = models.TextField(blank=True, null=True)
     capacidad = models.IntegerField(blank=True, null=True)
@@ -20,7 +20,7 @@ class Almacen(models.Model):
 
 class Estante(models.Model):
     id_estante = models.AutoField(primary_key=True)
-    codigo = models.CharField(max_length=50, unique=True)
+    codigo = models.CharField(max_length=50, unique=True, db_column='codigo_estante')
     detalles = models.TextField(blank=True, null=True)
     capacidad = models.IntegerField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)

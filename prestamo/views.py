@@ -11,7 +11,12 @@ from common.mixins import sesion_requerida
 from inventario.models import Herramienta
 from usuario.models import Usuario
 
-from .models import Devolucion, DetalleDevolucion, DetallePrestamo, Prestamo
+from .models import DetallePrestamo, Prestamo
+try:
+    from .models import Devolucion, DetalleDevolucion
+except ImportError:
+    Devolucion = None
+    DetalleDevolucion = None
 
 globals()["logger"] = logging.getLogger("prestamo.views")
 

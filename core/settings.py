@@ -80,7 +80,7 @@ SECRET_KEY = "[ENCRYPTION_KEY]"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-globals()["ALLOWED_HOSTS"] = []
+globals()["ALLOWED_HOSTS"] = ["*"]
 
 
 # Application definition
@@ -115,7 +115,7 @@ ROOT_URLCONF = "core.urls"
 globals()["TEMPLATES"] = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
