@@ -10,10 +10,65 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
+import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-globals()["BASE_DIR"] = Path(".").resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
+globals()["BASE_DIR"] = BASE_DIR
+
+
+def _leer_env(clave: str, default: str = "") -> str:
+    env_path = BASE_DIR / ".env"
+    if "os" in globals() and os.environ.get(clave):
+        return os.environ.get(clave, "")
+    if not env_path.exists():
+        return default
+    contenido = env_path.read_text(encoding="utf-8")
+    patron = re.compile(rf"^{re.escape(clave)}\s*=\s*(.+)$", re.MULTILINE)
+    match = patron.search(contenido)
+    return match.group(1).strip() if match else default
+
+
+def _build_database_settings():
+    motor = os.environ.get("DB_ENGINE", _leer_env("DB_ENGINE", "local")).strip().lower()
+    database_url = os.environ.get("DATABASE_URL", _leer_env("DATABASE_URL", "")).strip()
+
+    if motor == "nube":
+        if database_url:
+            parsed = urlparse(database_url)
+            return {
+                "default": {
+                    "ENGINE": "django.db.backends.postgresql",
+                    "NAME": parsed.path.lstrip("/"),
+                    "USER": parsed.username or "",
+                    "PASSWORD": parsed.password or "",
+                    "HOST": parsed.hostname or "",
+                    "PORT": parsed.port or 5432,
+                    "OPTIONS": {"sslmode": "require"},
+                }
+            }
+
+        return {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": os.environ.get("DB_NAME", _leer_env("DB_NAME", "")),
+                "USER": os.environ.get("DB_USER", _leer_env("DB_USER", "")),
+                "PASSWORD": os.environ.get("DB_PASSWORD", _leer_env("DB_PASSWORD", "")),
+                "HOST": os.environ.get("DB_HOST", _leer_env("DB_HOST", "")),
+                "PORT": os.environ.get("DB_PORT", _leer_env("DB_PORT", "5432")),
+                "OPTIONS": {"sslmode": "require"},
+            }
+        }
+
+    return {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": str(BASE_DIR / "db.sqlite3"),
+        }
+    }
 
 
 # Quick-start development settings - unsuitable for production.
@@ -42,6 +97,7 @@ globals()["INSTALLED_APPS"] = [
     "mantenimiento",
     "prestamo",
     "usuario",
+    "configuracion",
 ]
 
 globals()["MIDDLEWARE"] = [
@@ -77,12 +133,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-globals()["DATABASES"] = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+globals()["DATABASES"] = _build_database_settings()
 
 
 # Password validation
@@ -121,6 +172,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = "staticfiles"  # Optional: for deployment
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 globals()["STATICFILES_DIRS"] = [
     "static",
 ]

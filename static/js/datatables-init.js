@@ -34,6 +34,9 @@ window.obtenerBotonesDataTable = function (moduloName) {
       text: '<i class="bi bi-file-earmark-excel"></i>',
       className: 'btn btn-sm btn-success px-3 me-2',
       titleAttr: 'Exportar a Excel',
+      exportOptions: {
+        columns: ':visible'
+      },
       attr: {
         'data-bs-toggle': 'tooltip',
         'data-bs-placement': 'top',
@@ -54,11 +57,48 @@ window.obtenerBotonesDataTable = function (moduloName) {
         'data-bs-placement': 'top',
         'title': 'Exportar a PDF'
       },
+      exportOptions: {
+        columns: ':visible'
+      },
       customize: function (doc) {
         if (doc.styles && doc.styles.tableHeader) {
           doc.styles.tableHeader.fillColor = '#011936';
           doc.styles.tableHeader.color = '#FFFFFF';
         }
+
+        var now = new Date();
+        var fecha = now.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        doc.content = [{
+          text: 'MINE Inventory',
+          style: 'header',
+          margin: [0, 0, 0, 8]
+        }].concat(doc.content);
+
+        doc.content.splice(1, 0, {
+          columns: [
+            { text: 'Reporte exportado desde MINE Inventory', style: 'subheader' },
+            { text: fecha, style: 'subheader', alignment: 'right' }
+          ],
+          margin: [0, 0, 0, 12]
+        });
+
+        if (!doc.styles) doc.styles = {};
+        doc.styles.header = {
+          fontSize: 18,
+          bold: true,
+          color: '#011936'
+        };
+        doc.styles.subheader = {
+          fontSize: 10,
+          color: '#4b5563'
+        };
       },
       action: function (e, dt, node, config) {
         window.registrarExportacion(moduloName, 'pdf', dt.rows({ search: 'applied' }).count());
@@ -70,6 +110,9 @@ window.obtenerBotonesDataTable = function (moduloName) {
       text: '<i class="bi bi-printer"></i>',
       className: 'btn btn-sm btn-primary px-3',
       titleAttr: 'Imprimir listado',
+      exportOptions: {
+        columns: ':visible'
+      },
       attr: {
         'data-bs-toggle': 'tooltip',
         'data-bs-placement': 'top',
