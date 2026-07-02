@@ -21,21 +21,21 @@ from .models import Usuario
 from common.mixins import sesion_requerida
 from prestamo.models import Prestamo
 
-logger = logging.getLogger(__name__)
+globals()["logger"] = logging.getLogger("usuario.views")
 
-DOC_RULES = {
+globals()["DOC_RULES"] = {
     "CC": re.compile(r"^\d{6,10}$"),
     "CE": re.compile(r"^[A-Za-z0-9]{6,12}$"),
     "PP": re.compile(r"^[A-Za-z0-9]{5,9}$"),
     "TI": re.compile(r"^\d{10,11}$"),
 }
-DOC_LABELS = {
+globals()["DOC_LABELS"] = {
     "CC": "Cédula de Ciudadanía",
     "CE": "Cédula de Extranjería",
     "PP": "Pasaporte",
     "TI": "Tarjeta de Identidad",
 }
-DOC_HINTS = {
+globals()["DOC_HINTS"] = {
     "CC": "La Cédula de Ciudadanía debe tener entre 6 y 10 dígitos.",
     "CE": (
         "La Cédula de Extranjería debe tener entre 6 y 12 caracteres alfanuméricos."
@@ -43,9 +43,9 @@ DOC_HINTS = {
     "PP": "El Pasaporte debe tener entre 5 y 9 caracteres alfanuméricos.",
     "TI": "La Tarjeta de Identidad debe tener 10 u 11 dígitos.",
 }
-TIPOS_VALIDOS = set(DOC_RULES.keys())
-ROLES_VALIDOS = [r[0] for r in Usuario.Rol.choices]
-ROLES = [{"id": r[0], "nombre": r[1]} for r in Usuario.Rol.choices]
+globals()["TIPOS_VALIDOS"] = set(DOC_RULES.keys())
+globals()["ROLES_VALIDOS"] = [r[0] for r in Usuario.Rol.choices]
+globals()["ROLES"] = [{"id": r[0], "nombre": r[1]} for r in Usuario.Rol.choices]
 
 
 def _validar_documento(tipo, numero):

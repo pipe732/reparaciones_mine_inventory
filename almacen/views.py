@@ -26,17 +26,14 @@ def almacenes_view(request):
                 almacenes = Almacen.objects.all().order_by("id_almacen")
                 total_almacenes = Almacen.objects.count()
                 total_estantes = Estante.objects.count()
-                return render(
-                    request,
-                    "almacenes.html",
-                    {
-                        "almacenes": almacenes,
-                        "total_almacenes": total_almacenes,
-                        "total_estantes": total_estantes,
-                        "form": form,
-                        "show_modal": True,
-                    },
-                )
+                context = {
+                    "almacenes": almacenes,
+                    "total_almacenes": total_almacenes,
+                    "total_estantes": total_estantes,
+                    "form": form,
+                    "show_modal": True,
+                }
+                return render(request, "almacenes.html", context)
 
         elif accion == "editar":
             almacen_id = request.POST.get("almacen_id")
@@ -53,18 +50,15 @@ def almacenes_view(request):
                 almacenes = Almacen.objects.all().order_by("id_almacen")
                 total_almacenes = Almacen.objects.count()
                 total_estantes = Estante.objects.count()
-                return render(
-                    request,
-                    "almacenes.html",
-                    {
-                        "almacenes": almacenes,
-                        "total_almacenes": total_almacenes,
-                        "total_estantes": total_estantes,
-                        "form": AlmacenForm(),
-                        "form_editar": form_editar,
-                        "show_modal_editar": True,
-                    },
-                )
+                context = {
+                    "almacenes": almacenes,
+                    "total_almacenes": total_almacenes,
+                    "total_estantes": total_estantes,
+                    "form": AlmacenForm(),
+                    "form_editar": form_editar,
+                    "show_modal_editar": True,
+                }
+                return render(request, "almacenes.html", context)
 
         elif accion == "eliminar":
             almacen_id = request.POST.get("almacen_id")
@@ -79,16 +73,13 @@ def almacenes_view(request):
     total_estantes = Estante.objects.count()
     form = AlmacenForm()
 
-    return render(
-        request,
-        "almacenes.html",
-        {
-            "almacenes": almacenes,
-            "total_almacenes": total_almacenes,
-            "total_estantes": total_estantes,
-            "form": form,
-        },
-    )
+    context = {
+        "almacenes": almacenes,
+        "total_almacenes": total_almacenes,
+        "total_estantes": total_estantes,
+        "form": form,
+    }
+    return render(request, "almacenes.html", context)
 
 
 @login_required
@@ -98,14 +89,11 @@ def detalle_almacen_view(request, pk):
     """
     almacen = get_object_or_404(Almacen, pk=pk)
     estantes = almacen.estantes.all().order_by("id_estante")
-    return render(
-        request,
-        "detalle_almacen.html",
-        {
-            "almacen": almacen,
-            "estantes": estantes,
-        },
-    )
+    context = {
+        "almacen": almacen,
+        "estantes": estantes,
+    }
+    return render(request, "detalle_almacen.html", context)
 
 
 @login_required
@@ -130,18 +118,15 @@ def estantes_view(request):
                 almacenes = Almacen.objects.all()
                 total_estantes = Estante.objects.count()
                 total_almacenes = Almacen.objects.count()
-                return render(
-                    request,
-                    "estantes.html",
-                    {
-                        "estantes": estantes,
-                        "almacenes": almacenes,
-                        "total_estantes": total_estantes,
-                        "total_almacenes": total_almacenes,
-                        "form": form,
-                        "show_modal": True,
-                    },
-                )
+                context = {
+                    "estantes": estantes,
+                    "almacenes": almacenes,
+                    "total_estantes": total_estantes,
+                    "total_almacenes": total_almacenes,
+                    "form": form,
+                    "show_modal": True,
+                }
+                return render(request, "estantes.html", context)
 
         elif accion == "editar":
             estante_id = request.POST.get("estante_id")
@@ -159,19 +144,16 @@ def estantes_view(request):
                 almacenes = Almacen.objects.all()
                 total_estantes = Estante.objects.count()
                 total_almacenes = Almacen.objects.count()
-                return render(
-                    request,
-                    "estantes.html",
-                    {
-                        "estantes": estantes,
-                        "almacenes": almacenes,
-                        "total_estantes": total_estantes,
-                        "total_almacenes": total_almacenes,
-                        "form": EstanteForm(),
-                        "form_editar": form_editar,
-                        "show_modal_editar": True,
-                    },
-                )
+                context = {
+                    "estantes": estantes,
+                    "almacenes": almacenes,
+                    "total_estantes": total_estantes,
+                    "total_almacenes": total_almacenes,
+                    "form": EstanteForm(),
+                    "form_editar": form_editar,
+                    "show_modal_editar": True,
+                }
+                return render(request, "estantes.html", context)
 
         elif accion == "eliminar":
             estante_id = request.POST.get("estante_id")
@@ -187,14 +169,11 @@ def estantes_view(request):
     total_almacenes = Almacen.objects.count()
     form = EstanteForm()
 
-    return render(
-        request,
-        "estantes.html",
-        {
-            "estantes": estantes,
-            "almacenes": almacenes,
-            "total_estantes": total_estantes,
-            "total_almacenes": total_almacenes,
-            "form": form,
-        },
-    )
+    context = {
+        "estantes": estantes,
+        "almacenes": almacenes,
+        "total_estantes": total_estantes,
+        "total_almacenes": total_almacenes,
+        "form": form,
+    }
+    return render(request, "estantes.html", context)

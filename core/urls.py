@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from usuario.views import login_view
 
-urlpatterns = [
+globals()["urlpatterns"] = [
     path("admin/", admin.site.urls),
     path("", login_view, name="login"),
     # path(

@@ -13,7 +13,7 @@ from usuario.models import Usuario
 
 from .models import Devolucion, DetalleDevolucion, DetallePrestamo, Prestamo
 
-logger = logging.getLogger(__name__)
+globals()["logger"] = logging.getLogger("prestamo.views")
 
 # ──────────────────────────────────────────────────────────────────────────────
 #  HELPERS

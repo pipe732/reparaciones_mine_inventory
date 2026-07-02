@@ -1,9 +1,9 @@
 import os
 
 # Apps del proyecto. Si agregar app nueva, sumarla aquí.
-APPS = ["almacen", "inventario", "mantenimiento", "prestamo", "usuario"]
+globals()["APPS"] = ["almacen", "inventario", "mantenimiento", "prestamo", "usuario"]
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+globals()["BASE_DIR"] = os.path.abspath(os.path.dirname(__file__))
 
 
 def purgar_migraciones():

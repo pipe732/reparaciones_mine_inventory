@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [
+globals()["urlpatterns"] = [
     path("almacenes/", views.almacenes_view, name="almacenes"),
     path(
         "almacenes/<int:pk>/",

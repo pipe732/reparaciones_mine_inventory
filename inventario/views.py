@@ -68,11 +68,8 @@ def crear_herramienta(request):
             return redirect("inventario:listado_herramientas")
     else:
         form = HerramientaForm()
-    return render(
-        request,
-        "inventario/herramienta_form.html",
-        {"form": form, "titulo": "Crear Herramienta"},
-    )
+    context = {"form": form, "titulo": "Crear Herramienta"}
+    return render(request, "inventario/herramienta_form.html", context)
 
 
 @login_required
@@ -88,15 +85,12 @@ def editar_herramienta(request, pk):
             return redirect("inventario:detalle_herramienta", pk=herramienta.pk)
     else:
         form = HerramientaForm(instance=herramienta)
-    return render(
-        request,
-        "inventario/herramienta_form.html",
-        {
-            "form": form,
-            "herramienta": herramienta,
-            "titulo": "Editar Herramienta",
-        },
-    )
+    context = {
+        "form": form,
+        "herramienta": herramienta,
+        "titulo": "Editar Herramienta",
+    }
+    return render(request, "inventario/herramienta_form.html", context)
 
 
 @login_required
@@ -132,11 +126,8 @@ def crear_persona_recaudo(request):
             return redirect("inventario:listado_personas_recaudo")
     else:
         form = PersonaRecaudoForm()
-    return render(
-        request,
-        "inventario/persona_form.html",
-        {"form": form, "titulo": "Crear Persona"},
-    )
+    context = {"form": form, "titulo": "Crear Persona"}
+    return render(request, "inventario/persona_form.html", context)
 
 
 @login_required
@@ -152,11 +143,8 @@ def editar_persona_recaudo(request, pk):
             return redirect("inventario:listado_personas_recaudo")
     else:
         form = PersonaRecaudoForm(instance=persona)
-    return render(
-        request,
-        "inventario/persona_form.html",
-        {"form": form, "persona": persona, "titulo": "Editar Persona"},
-    )
+    context = {"form": form, "persona": persona, "titulo": "Editar Persona"}
+    return render(request, "inventario/persona_form.html", context)
 
 
 @login_required

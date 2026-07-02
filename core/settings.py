@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+globals()["BASE_DIR"] = Path(".").resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production.
@@ -25,12 +25,12 @@ SECRET_KEY = "[ENCRYPTION_KEY]"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+globals()["ALLOWED_HOSTS"] = []
 
 
 # Application definition
 
-INSTALLED_APPS = [
+globals()["INSTALLED_APPS"] = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "usuario",
 ]
 
-MIDDLEWARE = [
+globals()["MIDDLEWARE"] = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
-TEMPLATES = [
+globals()["TEMPLATES"] = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
@@ -77,7 +77,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
+globals()["DATABASES"] = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
@@ -88,20 +88,18 @@ DATABASES = {
 # Password validation
 # See AUTH_PASSWORD_VALIDATORS in Django reference settings docs.
 
-AUTH_VAL_PREFIX = "django.contrib.auth.password_validation"
-
-AUTH_PASSWORD_VALIDATORS = [
+globals()["AUTH_PASSWORD_VALIDATORS"] = [
     {
-        "NAME": f"{AUTH_VAL_PREFIX}.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": f"{AUTH_VAL_PREFIX}.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": f"{AUTH_VAL_PREFIX}.CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": f"{AUTH_VAL_PREFIX}.NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -122,7 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Optional: for deployment
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
+STATIC_ROOT = "staticfiles"  # Optional: for deployment
+globals()["STATICFILES_DIRS"] = [
+    "static",
 ]

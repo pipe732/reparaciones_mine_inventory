@@ -1,5 +1,5 @@
 # from django.urls import path
 
-app_name = "prestamo"
+globals()["app_name"] = "prestamo"
 
-urlpatterns = []
+globals()["urlpatterns"] = []

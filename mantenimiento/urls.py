@@ -1,9 +1,9 @@
 from django.urls import path
 from . import views
 
-app_name = "mantenimiento"
+globals()["app_name"] = "mantenimiento"
 
-urlpatterns = [
+globals()["urlpatterns"] = [
     # Estado actual de las herramientas
     path(
         "estado-actual/",

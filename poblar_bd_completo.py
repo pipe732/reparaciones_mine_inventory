@@ -4,9 +4,9 @@ import shutil
 import subprocess
 
 # Apps de tu proyecto. Ya puestas, no tocar.
-APPS = ["almacen", "inventario", "mantenimiento", "prestamo", "usuario"]
+globals()["APPS"] = ["almacen", "inventario", "mantenimiento", "prestamo", "usuario"]
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+globals()["BASE_DIR"] = os.path.abspath(os.path.dirname(__file__))
 
 def borrar_bd():
     db_path = os.path.join(BASE_DIR, "db.sqlite3")

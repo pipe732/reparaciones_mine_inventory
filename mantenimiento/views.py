@@ -90,15 +90,12 @@ def tipo_estado_nuevo_view(request):
         else:
             messages.error(request, "Error al crear el tipo de estado. Verifique los datos.")
             estados = TipoEstado.objects.all().order_by("nombre")
-            return render(
-                request,
-                "mantenimiento/tipos_estado.html",
-                {
-                    "estados": estados,
-                    "form": form,
-                    "show_modal": True,
-                },
-            )
+            context = {
+                "estados": estados,
+                "form": form,
+                "show_modal": True,
+            }
+            return render(request, "mantenimiento/tipos_estado.html", context)
     return redirect("mantenimiento:tipo_estado_lista")
 
 
@@ -168,15 +165,12 @@ def tipo_mantenimiento_crear_view(request):
         else:
             messages.error(request, "Error al crear el tipo de mantenimiento.")
             tipos = TipoMantenimiento.objects.all().order_by("nombre")
-            return render(
-                request,
-                "mantenimiento/tipos_mantenimiento.html",
-                {
-                    "tipos": tipos,
-                    "form": form,
-                    "show_modal": True,
-                },
-            )
+            context = {
+                "tipos": tipos,
+                "form": form,
+                "show_modal": True,
+            }
+            return render(request, "mantenimiento/tipos_mantenimiento.html", context)
     return redirect("mantenimiento:tipo_mantenimiento_lista")
 
 
@@ -239,17 +233,14 @@ def mantenimiento_lista_view(request):
                 return redirect("mantenimiento:mantenimiento_lista")
             else:
                 messages.error(request, "Error al registrar el mantenimiento.")
-                return render(
-                    request,
-                    "mantenimiento/mantenimientos.html",
-                    {
-                        "mantenimientos": mantenimientos,
-                        "form": form,
-                        "total_activos": total_activos,
-                        "total_finalizados": total_finalizados,
-                        "show_modal": True,
-                    },
-                )
+                context = {
+                    "mantenimientos": mantenimientos,
+                    "form": form,
+                    "total_activos": total_activos,
+                    "total_finalizados": total_finalizados,
+                    "show_modal": True,
+                }
+                return render(request, "mantenimiento/mantenimientos.html", context)
                 
         elif accion == "eliminar":
             mantenimiento_id = request.POST.get("mantenimiento_id")
