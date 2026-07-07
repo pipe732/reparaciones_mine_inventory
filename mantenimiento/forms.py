@@ -71,19 +71,19 @@ class DetalleMantenimientoForm(forms.ModelForm):
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["accion_realizada"].help_text = "Describa detalladamente las acciones ejecutadas."
+        self.fields["materiales_usados"].help_text = "Liste los materiales o repuestos utilizados."
+
 
 class BitacoraEstadoForm(forms.ModelForm):
-    estado = forms.ModelChoiceField(
-        queryset=TipoEstado.objects.all(),
-        to_field_name="nombre",
-        empty_label="Seleccione un estado...",
-        widget=forms.Select(attrs={"class": "form-select", "required": True}),
-        label="Nuevo Estado",
-    )
-
     class Meta:
         model = BitacoraEstado
-        fields = ["estado", "descripcion"]
+        fields = ["descripcion"]
+        labels = {
+            "descripcion": "Observaciones",
+        }
         widgets = {
             "descripcion": forms.Textarea(
                 attrs={
@@ -94,6 +94,10 @@ class BitacoraEstadoForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["descripcion"].help_text = "Observaciones sobre el estado actual de la herramienta."
 
 
 class TipoEstadoForm(forms.ModelForm):
@@ -121,6 +125,10 @@ class TipoEstadoForm(forms.ModelForm):
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["nombre"].help_text = "Nombre único del estado (ej. Excelente, En reparación)."
+
 
 class TipoMantenimientoForm(forms.ModelForm):
     class Meta:
@@ -142,3 +150,8 @@ class TipoMantenimientoForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["nombre"].help_text = "Nombre único del tipo (ej. Preventivo, Correctivo)."
+        self.fields["descripcion"].help_text = "Descripción breve del tipo de mantenimiento."

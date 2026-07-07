@@ -17,6 +17,7 @@ class ConfiguracionSistema(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'configuracion_sistema'
         verbose_name = 'Configuración del sistema'
         verbose_name_plural = 'Configuración del sistema'
 
