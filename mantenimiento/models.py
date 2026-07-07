@@ -112,3 +112,6 @@ class TipoMantenimiento(models.Model):
         from .models import Mantenimiento
         return Mantenimiento.objects.filter(tipo_mantenimiento=self.nombre)
 
+    def __str__(self):
+        return self.nombre
+

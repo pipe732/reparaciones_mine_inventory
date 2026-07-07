@@ -175,7 +175,9 @@ def tipo_estado_nuevo_view(request):
                 "titulo": "Tipos de Estado",
                 "subtitulo": "Catálogo de estados de mantenimiento",
             }
-            return render(request, "mantenimiento/tipo_estado_list.html", context)
+            return render(
+                request, "mantenimiento/tipo_estado_list.html", context
+            )
     return redirect("mantenimiento:tipo_estado_lista")
 
 
@@ -415,7 +417,9 @@ def mantenimiento_lista_view(request):
                     mantenimiento=mantenimiento,
                     estado="Ingresado",
                     nivel_estado="warning",
-                    descripcion=("Ingreso inicial al módulo de mantenimiento."),
+                    descripcion=(
+                        "Ingreso inicial al módulo de mantenimiento."
+                    ),
                 )
                 messages.success(
                     request,
