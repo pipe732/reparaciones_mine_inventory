@@ -28,7 +28,9 @@ class PrestamoForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 3,
-                    "placeholder": "Motivo del préstamo u observaciones (opcional)",
+                    "placeholder": (
+                        "Motivo del préstamo u observaciones" " (opcional)"
+                    ),
                 }
             ),
         }
@@ -39,7 +41,9 @@ class PrestamoForm(forms.ModelForm):
         self.fields["herramienta"].queryset = Herramienta.objects.filter(
             disponibilidad=True
         ).order_by("nombre_herramienta")
-        self.fields["herramienta"].empty_label = "Seleccione una herramienta..."
+        self.fields["herramienta"].empty_label = (
+            "Seleccione una herramienta..."
+        )
         self.fields["usuario"].queryset = Usuario.objects.all().order_by(
             "nombre_completo"
         )
@@ -72,8 +76,12 @@ class CambiarEstadoPrestamoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["id_estado"].help_text = "Seleccione el nuevo estado del préstamo."
-        self.fields["observaciones"].help_text = "Motivo u observaciones del cambio de estado."
+        self.fields["id_estado"].help_text = (
+            "Seleccione el nuevo estado del préstamo."
+        )
+        self.fields["observaciones"].help_text = (
+            "Motivo u observaciones del cambio de estado."
+        )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -106,7 +114,9 @@ class DetallePrestamoForm(forms.ModelForm):
         self.fields["herramienta"].queryset = Herramienta.objects.filter(
             disponibilidad=True
         ).order_by("nombre_herramienta")
-        self.fields["herramienta"].empty_label = "Seleccione una herramienta..."
+        self.fields["herramienta"].empty_label = (
+            "Seleccione una herramienta..."
+        )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -132,7 +142,9 @@ class DevolucionHerramientaForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 2,
-                    "placeholder": "Estado de la herramienta al devolver (opcional)",
+                    "placeholder": (
+                        "Estado de la herramienta al devolver" " (opcional)"
+                    ),
                 }
             ),
         }
@@ -144,8 +156,12 @@ class DevolucionHerramientaForm(forms.ModelForm):
                 "prestamo__usuario", "herramienta"
             ).order_by("-prestamo__fecha_solicitud")
         )
-        self.fields["detalle_prestamo"].empty_label = "Seleccione un detalle..."
-        self.fields["herramienta"].queryset = Herramienta.objects.all().order_by(
-            "nombre_herramienta"
+        self.fields["detalle_prestamo"].empty_label = (
+            "Seleccione un detalle..."
         )
-        self.fields["herramienta"].empty_label = "Seleccione una herramienta..."
+        self.fields["herramienta"].queryset = (
+            Herramienta.objects.all().order_by("nombre_herramienta")
+        )
+        self.fields["herramienta"].empty_label = (
+            "Seleccione una herramienta..."
+        )

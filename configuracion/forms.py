@@ -32,8 +32,12 @@ class ConfiguracionSistemaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["almacenamiento"].help_text = "Seleccione dónde se almacenarán los datos del sistema."
-        self.fields["database_url"].help_text = "Requerido únicamente si elige almacenamiento en la Nube."
+        self.fields["almacenamiento"].help_text = (
+            "Seleccione dónde se almacenarán los datos del sistema."
+        )
+        self.fields["database_url"].help_text = (
+            "Requerido únicamente si elige almacenamiento en la Nube."
+        )
 
     def clean(self):
         cleaned_data = super().clean()

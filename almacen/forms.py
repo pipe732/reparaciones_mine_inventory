@@ -32,7 +32,9 @@ class AlmacenForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["nombre"].help_text = "Nombre descriptivo y único para el almacén."
+        self.fields["nombre"].help_text = (
+            "Nombre descriptivo y único para el almacén."
+        )
 
 
 class EstanteForm(forms.ModelForm):
@@ -73,5 +75,7 @@ class EstanteForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         from .models import Almacen
 
-        self.fields["almacen"].queryset = Almacen.objects.all().order_by("nombre")
+        self.fields["almacen"].queryset = (
+            Almacen.objects.all().order_by("nombre")
+        )
         self.fields["almacen"].empty_label = "Seleccione un almacén..."

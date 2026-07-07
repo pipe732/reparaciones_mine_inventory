@@ -1,17 +1,25 @@
 from django.urls import path
+
 from . import views
 
-globals()["app_name"] = "mantenimiento"
+app_name = "mantenimiento"
 
-globals()["urlpatterns"] = [
-    # Estado actual de las herramientas
+urlpatterns = [
+    # ── Estado actual de herramientas ──────────────────────────
     path(
         "estado-actual/",
         views.estado_actual_lista_view,
         name="estado_actual_lista",
     ),
 
-    # Catálogo de Tipos de Estado
+    # ── Historial por herramienta / producto ───────────────────
+    path(
+        "historial/<int:pk>/",
+        views.historial_producto_view,
+        name="historial_producto",
+    ),
+
+    # ── Catálogo: Tipos de Estado ──────────────────────────────
     path(
         "tipo-estado/",
         views.tipo_estado_lista_view,
@@ -28,7 +36,7 @@ globals()["urlpatterns"] = [
         name="tipo_estado_editar",
     ),
 
-    # Catálogo de Tipos de Mantenimiento
+    # ── Catálogo: Tipos de Mantenimiento ───────────────────────
     path(
         "tipo-mantenimiento/",
         views.tipo_mantenimiento_lista_view,
@@ -44,16 +52,43 @@ globals()["urlpatterns"] = [
         views.tipo_mantenimiento_editar_view,
         name="tipo_mantenimiento_editar",
     ),
-
-    # Gestión de Mantenimientos
     path(
-        "lista/",
+        "tipo-mantenimiento/inactivar/<int:pk>/",
+        views.tipo_mantenimiento_inactivar_view,
+        name="tipo_mantenimiento_inactivar",
+    ),
+    path(
+        "tipo-mantenimiento/eliminar/<int:pk>/",
+        views.tipo_mantenimiento_confirmar_view,
+        name="tipo_mantenimiento_eliminar",
+    ),
+
+    # ── Gestión de Mantenimientos ──────────────────────────────
+    path(
+        "",
         views.mantenimiento_lista_view,
         name="mantenimiento_lista",
     ),
     path(
-        "detalle/<int:pk>/",
+        "nuevo/",
+        views.mantenimiento_crear_view,
+        name="mantenimiento_crear",
+    ),
+    path(
+        "<int:pk>/",
         views.mantenimiento_detalle_view,
         name="mantenimiento_detalle",
+    ),
+    path(
+        "<int:pk>/editar/",
+        views.mantenimiento_editar_view,
+        name="mantenimiento_editar",
+    ),
+
+    # ── Acción POST: agregar detalle desde vista detalle ───────
+    path(
+        "<int:pk>/detalle/crear/",
+        views.detalle_mantenimiento_crear_view,
+        name="detalle_mantenimiento_crear",
     ),
 ]

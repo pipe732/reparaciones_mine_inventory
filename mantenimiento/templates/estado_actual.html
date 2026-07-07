@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Estado Actual de Herramientas{% endblock %}
+
+{% block content %}
+
+{% include "mantenimiento/partials/_cabecera.html" with titulo="Estado Actual de Herramientas" subtitulo="Disponibilidad y ultimo estado registrado de cada item" %}
+
+ 
+<div class="d-flex gap-3 mb-4">
+  <span class="extracted-style-77"
+  >
+    Total:
+    <strong class="extracted-style-78">{{ productos|length }}</strong>
+  </span>
+  <span class="badge-state badge-aprobada"
+    >Disponibles: {{ total_disponibles }}</span
+  >
+  <span class="badge-state badge-rechazada"
+    >No disponibles: {{ total_no_disponibles }}</span
+  >
+</div>
+
+{% include "mantenimiento/lista.html" with modo='estado_actual' %}
+
+ 
+<div class="card table-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <span class="card-title">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+      Ítems registrados
+    </span>
+    {% include "mantenimiento/partials/_count_badge.html" with total=productos|length singular="item" plural_suffix=",s" %}
+  </div>
+
+  <div class="table-responsive">
+    <tableborder class="table-app datatable-disabled w-100"-collapse: collapse; font-size: 0.9rem"
+    >
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Ubicación</th>
+          <th class="text-center">Disponible</th>
+          <th>Último mantenimiento</th>
+          <th>Estado actual</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in productos %}
+        <tr>
+          <td>
+            <span class="extracted-style-79"
+            >
+              {{ p.codigo_sku }}
+            </span>
+          </td>
+          <td class="extracted-style-80">{{ p.nombre }}</td>
+          <td class="extracted-style-81">
+            {{ p.ubicacion|default:"—" }}
+          </td>
+          <td class="text-center">
+            {% if p.disponible %}
+            <span class="badge-state badge-aprobada">Disponible</span>
+            {% else %}
+            <span class="badge-state badge-rechazada">No disponible</span>
+            {% endif %}
+          </td>
+          <td>
+            {% with ultimo=p.mantenimientos.all|first %}
+              {% if ultimo %}
+                <span class="extracted-style-82">
+                  {{ ultimo.fecha_reporte|date:"d/m/Y" }}
+                </span>
+                <small class="extracted-style-83">
+                  ({{ ultimo.get_tipo_mantenimiento_display }})
+                </small>
+              {% else %}
+                <span class="extracted-style-83">Sin mantenimiento</span>
+              {% endif %}
+            {% endwith %}
+          </td>
+          
+          <td>
+            {% with ultimo=p.mantenimientos.all|first %}
+              {% if ultimo and ultimo.tipo_estado %}
+                <span
+                  class="badge-state extracted-style-84"
+                  data-dynamic-bg="{{ ultimo.tipo_estado.color|default:'#6c757d' }}"
+                >
+                  {{ ultimo.tipo_estado.nombre }}
+                </span>
+              {% else %}
+                <span class="badge-state badge-pendiente">Sin estado</span>
+              {% endif %}
+            {% endwith %}
+          </td>
+          
+          {% url 'mantenimiento:historial_producto' p.pk as historial_url %}
+          <td class="text-center">
+            {% include "mantenimiento/partials/_action_icon_button.html" with href=historial_url title="Ver historial" icon="history" %}
+          </td>
+        </tr>
+        {% empty %}
+          {% include "mantenimiento/partials/_tabla_empty.html" with colspan=7 empty_mensaje="No se encontraron herramientas con los filtros aplicados." %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

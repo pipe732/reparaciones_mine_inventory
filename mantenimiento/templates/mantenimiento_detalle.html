@@ -1,0 +1,300 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% load form_filters %}
+{% block title %}
+Detalle de Mantenimiento
+{% endblock %}
+
+{% block content %} 
+
+{% include "mantenimiento/partials/_cabecera.html" with titulo="Detalle de Mantenimiento" subtitulo=m.producto.nombre url_cancelar=url_cancelar %}
+
+<div class="row g-4">
+  
+  <div class="col-md-8">
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Item / Herramienta" %}
+        <p class="extracted-style-92">
+          <span class="extracted-style-93">
+            [{{ m.producto.codigo_sku }}]
+          </span>
+          {{ m.producto.nombre }}
+        </p>
+        {% if m.ubicacion_snapshot %}
+        <p class="extracted-style-94">
+          Ubicación al registrar: {{ m.ubicacion_snapshot }}
+        </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Nuevo detalle" %}
+
+        <form method="post" action="{% url 'mantenimiento:detalle_mantenimiento_crear' m.pk %}" enctype="multipart/form-data" class="row g-3">
+          {% csrf_token %}
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">{{ detalle_form.tipo_mantenimiento.label }} <span class="text-danger">*</span></label>
+            {% if detalle_form.tipo_mantenimiento.errors %}
+              {{ detalle_form.tipo_mantenimiento|add_class:"form-select is-invalid" }}
+              {% for e in detalle_form.tipo_mantenimiento.errors %}<div class="invalid-feedback d-block mt-1">{{ e }}</div>{% endfor %}
+            {% else %}
+              {{ detalle_form.tipo_mantenimiento|add_class:"form-select" }}
+            {% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">{{ detalle_form.tipo.label }} <span class="text-danger">*</span></label>
+            {% if detalle_form.tipo.errors %}
+              {{ detalle_form.tipo|add_class:"form-select is-invalid" }}
+              {% for e in detalle_form.tipo.errors %}<div class="invalid-feedback d-block mt-1">{{ e }}</div>{% endfor %}
+            {% else %}
+              {{ detalle_form.tipo|add_class:"form-select" }}
+            {% endif %}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold">{{ detalle_form.descripcion.label }} <span class="text-danger">*</span></label>
+            {% if detalle_form.descripcion.errors %}
+              {{ detalle_form.descripcion|add_class:"form-control is-invalid" }}
+              {% for e in detalle_form.descripcion.errors %}<div class="invalid-feedback d-block mt-1">{{ e }}</div>{% endfor %}
+            {% else %}
+              {{ detalle_form.descripcion|add_class:"form-control" }}
+            {% endif %}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold">{{ detalle_form.evidencia_adicional.label }}</label>
+            {% if detalle_form.evidencia_adicional.errors %}
+              {{ detalle_form.evidencia_adicional|add_class:"form-control is-invalid" }}
+              {% for e in detalle_form.evidencia_adicional.errors %}<div class="invalid-feedback d-block mt-1">{{ e }}</div>{% endfor %}
+            {% else %}
+              {{ detalle_form.evidencia_adicional|add_class:"form-control" }}
+            {% endif %}
+          </div>
+
+          <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn-primary-mine">Guardar detalle</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Detalles registrados" %}
+        {% if m.detalles.all %}
+          <div class="d-flex flex-column gap-3">
+            {% for d in m.detalles.all %}
+              <div class="p-3 rounded extracted-style-95">
+                <div class="d-flex justify-content-between gap-3 flex-wrap mb-2">
+                  <strong>{{ d.get_tipo_display }}</strong>
+                  <small class="extracted-style-96">{{ d.creado_en|date:"d/m/Y H:i" }}</small>
+                </div>
+                <p class="mb-2 extracted-style-97">{{ d.descripcion }}</p>
+                <div class="d-flex justify-content-between flex-wrap gap-2 extracted-style-98">
+                  <span>Tipo mantenimiento: {{ d.tipo_mantenimiento.nombre }}</span>
+                  <span>
+                    {{ d.registrado_por.nombre_completo|default:"Sistema" }}
+                  </span>
+                </div>
+                {% if d.evidencia_adicional %}
+                  <div class="mt-2">
+                    <a href="{{ d.evidencia_adicional.url }}" target="_blank" class="btn-outline-mine">Ver evidencia</a>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="mb-0 extracted-style-83">Todavía no hay detalles registrados.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if cambios_auditoria %}
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Historial de cambios" %}
+        <div class="table-responsive">
+          <tableborder class="table-app datatable-disabled w-100"-collapse: collapse; font-size: 0.84rem;">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Motivo</th>
+                <th>Cambios</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in cambios_auditoria %}
+              <tr>
+                <td class="extracted-style-99">{{ c.fecha_edicion|date:"d/m/Y H:i" }}</td>
+                <td>
+                  {{ c.editado_por.nombre_completo|default:c.editado_por.get_full_name|default:c.editado_por.username|default:"Sistema" }}
+                </td>
+                <td>
+                  {{ c.get_motivo_edicion_display }}
+                  {% if c.detalle_motivo %}
+                    <br><small class="extracted-style-83">{{ c.detalle_motivo }}</small>
+                  {% endif %}
+                </td>
+                <td><code class="extracted-style-100">{{ c.cambios }}</code></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Estado del registro" %}
+
+        <div class="d-flex flex-column gap-2 extracted-style-101">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="extracted-style-83">Tipo</span>
+            {% if m.tipo_mantenimiento %}
+              <span class="badge-state extracted-style-86"#6c757d' }}; color:#fff;">
+                {{ m.tipo_mantenimiento.nombre }}
+              </span>
+            {% else %}
+              <span class="badge-state badge-pendiente">Sin tipo</span>
+            {% endif %}
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="extracted-style-83">Prioridad</span>
+            <span class="badge-state badge-pendiente">{{ m.get_prioridad_display }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="extracted-style-83">Estado</span>
+            {% include "mantenimiento/partials/_badge_estado_registro.html" with estado=m.estado_registro etiqueta=m.get_estado_registro_display %}
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="extracted-style-83">Tipo de estado</span>
+            {% if m.tipo_estado %}
+            <span class="badge-state extracted-style-84" 
+                  data-dynamic-bg="{{ m.tipo_estado.color|default:'#6c757d' }}">
+              {{ m.tipo_estado.nombre }}
+            </span>
+            {% else %}
+            <span class="extracted-style-83">—</span>
+            {% endif %}
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="extracted-style-83">Responsable</span>
+            <span class="extracted-style-80">
+              {{ m.responsable.nombre_completo|default:"-" }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Fechas" %}
+
+        <div class="d-flex flex-column gap-2 extracted-style-102">
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Reporte</span>
+            <span class="extracted-style-99">{{ m.fecha_reporte|date:"d/m/Y" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Inicio</span>
+            <span class="extracted-style-99">{{ m.fecha_inicio|date:"d/m/Y" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Fin estimado</span>
+            <span class="extracted-style-99">{{ m.fecha_fin_estimada|date:"d/m/Y"|default:"—" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Fin real</span>
+            <span class="extracted-style-99">{{ m.fecha_fin_real|date:"d/m/Y"|default:"—" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Tiempo empleado</span>
+            <span class="extracted-style-99">{{ m.tiempo_empleado_horas|default:"—" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Costos" %}
+
+        <div class="d-flex flex-column gap-2 extracted-style-102">
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Estimado</span>
+            <span class="extracted-style-99">{% if m.costo_estimado %}${{ m.costo_estimado }}{% else %}—{% endif %}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="extracted-style-83">Real</span>
+            <span class="extracted-style-103">
+              {% if m.costo_real %}${{ m.costo_real }}{% else %}—{% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body extracted-style-91">
+        {% include "mantenimiento/partials/_section_heading.html" with titulo="Auditoria" %}
+
+        <div class="d-flex flex-column gap-2 extracted-style-104">
+          <div class="d-flex justify-content-between">
+            <span>Registrado por</span>
+            <span>{{ m.creado_por.nombre_completo|default:"-" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Creado el</span>
+            <span class="extracted-style-99">{{ m.creado_en|date:"d/m/Y H:i" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Actualizado</span>
+            <span class="extracted-style-99">{{ m.actualizado_en|date:"d/m/Y H:i" }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Última edición por</span>
+            <span>{{ m.actualizado_por.nombre_completo|default:"-" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex gap-2 mt-4">
+  {% if puede_editar %}
+  <a href="{% url 'mantenimiento:mantenimiento_editar' m.pk %}" class="btn-primary-mine">
+    Editar registro
+  </a>
+  {% endif %}
+  <a href="{% url 'mantenimiento:historial_producto' m.producto.pk %}" class="btn-outline-mine">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12 a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+    </svg>
+    Ver historial del ítem
+  </a>
+  <a href="{% url 'mantenimiento:mantenimiento_lista' %}" class="btn-outline-mine">
+    ← Volver
+  </a>
+</div>
+
+{% endblock %}

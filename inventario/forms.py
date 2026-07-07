@@ -41,7 +41,9 @@ class CategoriaHerramientaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["descripcion"].help_text = "Descripción breve y única de la categoría."
+        self.fields["descripcion"].help_text = (
+            "Descripción breve y única de la categoría."
+        )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -100,7 +102,9 @@ class HerramientaForm(forms.ModelForm):
         self.fields["categoria_herramienta"].queryset = (
             CategoriaHerramienta.objects.all().order_by("descripcion")
         )
-        self.fields["categoria_herramienta"].empty_label = "Seleccione una categoría..."
+        self.fields["categoria_herramienta"].empty_label = (
+            "Seleccione una categoría..."
+        )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -109,7 +113,13 @@ class HerramientaForm(forms.ModelForm):
 class InventarioForm(forms.ModelForm):
     class Meta:
         model = Inventario
-        fields = ["herramienta", "estante", "cantidad", "responsable", "observaciones"]
+        fields = [
+            "herramienta",
+            "estante",
+            "cantidad",
+            "responsable",
+            "observaciones",
+        ]
         labels = {
             "herramienta": "Herramienta",
             "estante": "Estante / Ubicación",
@@ -150,10 +160,12 @@ class InventarioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["herramienta"].queryset = Herramienta.objects.all().order_by(
-            "nombre_herramienta"
+        self.fields["herramienta"].queryset = (
+            Herramienta.objects.all().order_by("nombre_herramienta")
         )
-        self.fields["herramienta"].empty_label = "Seleccione una herramienta..."
+        self.fields["herramienta"].empty_label = (
+            "Seleccione una herramienta..."
+        )
         self.fields["estante"].queryset = Estante.objects.select_related(
             "almacen"
         ).order_by("almacen__nombre", "codigo")
@@ -204,15 +216,21 @@ class ProveedorForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 2,
-                    "placeholder": "Información adicional del proveedor (opcional)",
+                    "placeholder": (
+                        "Información adicional del proveedor (opcional)"
+                    ),
                 }
             ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["nit_proveedor"].help_text = "NIT o RUT del proveedor (sin espacios)."
-        self.fields["correo_proveedor"].help_text = "Correo de contacto principal."
+        self.fields["nit_proveedor"].help_text = (
+            "NIT o RUT del proveedor (sin espacios)."
+        )
+        self.fields["correo_proveedor"].help_text = (
+            "Correo de contacto principal."
+        )
 
 
 # ──────────────────────────────────────────────────────────────
@@ -289,14 +307,19 @@ class DetalleMovimientoForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 2,
-                    "placeholder": "Detalle adicional del movimiento (opcional)",
+                    "placeholder": (
+                        "Detalle adicional del movimiento (opcional)"
+                    ),
                 }
             ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["inventario"].queryset = Inventario.objects.select_related(
-            "herramienta"
-        ).order_by("herramienta__nombre_herramienta")
-        self.fields["inventario"].empty_label = "Seleccione un inventario..."
+        self.fields["inventario"].queryset = (
+            Inventario.objects.select_related("herramienta")
+            .order_by("herramienta__nombre_herramienta")
+        )
+        self.fields["inventario"].empty_label = (
+            "Seleccione un inventario..."
+        )

@@ -95,6 +95,20 @@ class TipoMantenimiento(models.Model):
         verbose_name = "Tipo de Mantenimiento"
         verbose_name_plural = "Tipos de Mantenimiento"
 
-    def __str__(self):
-        return self.nombre
+    @property
+    def activo(self):
+        return True
+
+    @property
+    def puede_inactivarse(self):
+        return False
+
+    @property
+    def puede_eliminarse(self):
+        return not self.mantenimientos.exists()
+
+    @property
+    def mantenimientos(self):
+        from .models import Mantenimiento
+        return Mantenimiento.objects.filter(tipo_mantenimiento=self.nombre)
 

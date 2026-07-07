@@ -20,7 +20,12 @@ class MantenimientoForm(forms.ModelForm):
 
     class Meta:
         model = Mantenimiento
-        fields = ["herramienta", "tipo_mantenimiento", "descripcion", "fecha_ingreso"]
+        fields = [
+            "herramienta",
+            "tipo_mantenimiento",
+            "descripcion",
+            "fecha_ingreso",
+        ]
         widgets = {
             "herramienta": forms.Select(
                 attrs={"class": "form-select", "required": True}
@@ -44,8 +49,8 @@ class MantenimientoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Solo permitir herramientas que existan en el sistema
-        self.fields["herramienta"].queryset = Herramienta.objects.all().order_by(
-            "nombre"
+        self.fields["herramienta"].queryset = (
+            Herramienta.objects.all().order_by("nombre")
         )
 
 
@@ -73,8 +78,12 @@ class DetalleMantenimientoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["accion_realizada"].help_text = "Describa detalladamente las acciones ejecutadas."
-        self.fields["materiales_usados"].help_text = "Liste los materiales o repuestos utilizados."
+        self.fields["accion_realizada"].help_text = (
+            "Describa detalladamente las acciones ejecutadas."
+        )
+        self.fields["materiales_usados"].help_text = (
+            "Liste los materiales o repuestos utilizados."
+        )
 
 
 class BitacoraEstadoForm(forms.ModelForm):
@@ -97,7 +106,9 @@ class BitacoraEstadoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["descripcion"].help_text = "Observaciones sobre el estado actual de la herramienta."
+        self.fields["descripcion"].help_text = (
+            "Observaciones sobre el estado actual de la herramienta."
+        )
 
 
 class TipoEstadoForm(forms.ModelForm):
@@ -127,7 +138,9 @@ class TipoEstadoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["nombre"].help_text = "Nombre único del estado (ej. Excelente, En reparación)."
+        self.fields["nombre"].help_text = (
+            "Nombre único del estado (ej. Excelente, En reparación)."
+        )
 
 
 class TipoMantenimientoForm(forms.ModelForm):
@@ -153,5 +166,9 @@ class TipoMantenimientoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["nombre"].help_text = "Nombre único del tipo (ej. Preventivo, Correctivo)."
-        self.fields["descripcion"].help_text = "Descripción breve del tipo de mantenimiento."
+        self.fields["nombre"].help_text = (
+            "Nombre único del tipo (ej. Preventivo, Correctivo)."
+        )
+        self.fields["descripcion"].help_text = (
+            "Descripción breve del tipo de mantenimiento."
+        )

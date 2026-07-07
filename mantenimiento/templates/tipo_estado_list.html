@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %} 
+{% load form_filters %}
+{% block title %}
+{{ titulo }}
+{% endblock %} 
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between gap-3 mb-4">
+  <div class="flex-grow-1">
+    {% include "mantenimiento/partials/_cabecera.html" with titulo=titulo subtitulo=subtitulo only %}
+  </div>
+  <button type="button" class="btn-primary-mine extracted-style-114" data-bs-toggle="modal" data-bs-target="#modalNuevoEstado">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="16" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+    </svg>
+    Nuevo Tipo de Estado
+  </button>
+</div>
+
+<div class="card table-card">
+  <!-- ... header igual ... -->
+
+  <div class="table-responsive">
+    <tableborder class="table-app datatable-disabled w-100"-collapse: collapse; font-size: 0.9rem">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Impacto disponibilidad</th>
+          <th class="text-center">Color</th>
+          <th class="text-center">Activo</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for estado in estados %}
+        <tr>
+          <td><span class="extracted-style-85">{{ estado.codigo }}</span></td>
+          <td class="extracted-style-80">{{ estado.nombre }}</td>
+          <td>{{ estado.get_categoria_display|default:"—" }}</td>
+          <td class="extracted-style-115">
+            {{ estado.get_impacto_disponibilidad_display|default:"—" }}
+          </td>
+          <td class="text-center">
+            {% if estado.color %}
+              <span class="extracted-style-116" data-dynamic-bg="{{ estado.color }}"
+                    title="{{ estado.color }}"></span>
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-center">
+            {% if estado.activo %}
+              <span class="badge-state badge-aprobada">Activo</span>
+            {% else %}
+              <span class="badge-state badge-rechazada">Inactivo</span>
+            {% endif %}
+          </td>
+          <td class="text-center">
+            {% url 'mantenimiento:tipo_estado_editar' estado.pk as editar_url %}
+            {% include "mantenimiento/partials/_action_icon_button.html" with href=editar_url title="Editar" icon="edit" %}
+          </td>
+        </tr>
+        {% empty %}
+          {% include "mantenimiento/partials/_tabla_empty.html" with colspan=7 empty_mensaje="Aún no hay tipos de estado registrados." empty_hint="Usa Nuevo Tipo de Estado para agregar uno." %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="modalNuevoEstado" tabindex="-1" aria-labelledby="modalNuevoEstadoLabel" aria-hidden="true" data-has-errors="{{ show_modal|yesno:'true,false' }}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title mb-1" id="modalNuevoEstadoLabel">Nuevo Tipo de Estado</h5>
+          <p class="mb-0 text-muted" style="font-size: 0.8rem">Registra un tipo de estado sin salir de la lista.</p>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formNuevoEstado" method="post" action="{% url 'mantenimiento:tipo_estado_nuevo' %}" novalidate>
+        {% csrf_token %}
+        <div class="modal-body">
+          {% if tipo_estado_form.non_field_errors %}
+            <div class="alert alert-danger mb-4">
+              {% for error in tipo_estado_form.non_field_errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="{{ tipo_estado_form.nombre.id_for_label }}">{{ tipo_estado_form.nombre.label }}</label>
+              {% if tipo_estado_form.nombre.errors %}
+                {{ tipo_estado_form.nombre|add_class:"form-control is-invalid" }}
+              {% else %}
+                {{ tipo_estado_form.nombre|add_class:"form-control" }}
+              {% endif %}
+              {% for error in tipo_estado_form.nombre.errors %}
+                <div class="invalid-feedback d-block mt-1">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label" for="{{ tipo_estado_form.nivel.id_for_label }}">{{ tipo_estado_form.nivel.label }}</label>
+              {% if tipo_estado_form.nivel.errors %}
+                {{ tipo_estado_form.nivel|add_class:"form-select is-invalid" }}
+              {% else %}
+                {{ tipo_estado_form.nivel|add_class:"form-select" }}
+              {% endif %}
+              {% for error in tipo_estado_form.nivel.errors %}
+                <div class="invalid-feedback d-block mt-1">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn-primary-mine">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11 a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            Guardar Estado
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById('modalNuevoEstado');
+    if (modal && modal.dataset.hasErrors === 'true') {
+      new bootstrap.Modal(modal).show();
+    }
+  });
+</script>
+
+{% endblock %}
