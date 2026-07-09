@@ -6,16 +6,16 @@
 {# ══ CABECERA PERSONALIZADA ══ #}
 <div class="d-flex align-items-center justify-content-between mb-4">
   <div>
-    <h5 style="font-family:var(--font-ui); font-weight:700; font-size:1rem;
+    <h5 style="{{''}}font-family:var(--font-ui); font-weight:700; font-size:1rem;
                color:var(--text-main); letter-spacing:.03em; margin:0;">
       Bienvenido de nuevo,
-      <span style="color:var(--navy);">{{ usuario.nombre_completo|truncatewords:2 }}</span>
+      <span style="{{''}}color:var(--navy);">{{ usuario.nombre_completo|truncatewords:2 }}</span>
     </h5>
-    <p style="font-family:var(--font-ui); font-size:.8rem; color:var(--text-muted); margin:0;">
-      Tu actividad personal en el inventario — <span style="font-family:var(--font-mono); font-size:.75rem;">{{ usuario.numero_documento }}</span>
+    <p style="{{''}}font-family:var(--font-ui); font-size:.8rem; color:var(--text-muted); margin:0;">
+      Tu actividad personal en el inventario — <span style="{{''}}font-family:var(--font-mono); font-size:.75rem;">{{ usuario.numero_documento }}</span>
     </p>
   </div>
-  <div style="display:flex; gap:.6rem;">
+  <div style="{{''}}display:flex; gap:.6rem;">
     <div class="stock-notif-wrapper">
       <button id="btn-stock-bell" type="button" class="btn-outline-mine btn-icon"
               aria-expanded="false" aria-controls="stock-notif-panel">
@@ -58,13 +58,13 @@
 {# ══ ALERTAS DE URGENCIA ══ #}
 {% if vencidos_count %}
 <div class="d-flex align-items-center gap-3 mb-3 px-4 py-3"
-     style="background:rgba(152,71,62,.07); border:1px solid rgba(152,71,62,.3);
+     style="{{''}}background:rgba(152,71,62,.07); border:1px solid rgba(152,71,62,.3);
             border-radius:var(--radius-md); font-family:var(--font-ui);">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="2.2" style="flex-shrink:0;">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="2.2" style="{{''}}flex-shrink:0;">
     <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
     <line x1="12" y1="16" x2="12.01" y2="16"/>
   </svg>
-  <span style="font-size:.88rem; color:var(--rust);">
+  <span style="{{''}}font-size:.88rem; color:var(--rust);">
     Tienes <strong>{{ vencidos_count }} préstamo{{ vencidos_count|pluralize }}</strong>
     vencido{{ vencidos_count|pluralize }}. Contacta al administrador.
   </span>
@@ -76,57 +76,57 @@
 <div class="row g-3 mb-4">
 
   <div class="col-6 col-md col-lg">
-    <div class="card h-100 kpi-usr" style="padding:.9rem 1rem;" data-delay="0">
-      <div class="kpi-bar" style="background:var(--navy);"></div>
-      <div style="font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
+    <div class="card h-100 kpi-usr" style="{{''}}padding:.9rem 1rem;" data-delay="0">
+      <div class="kpi-bar" style="{{''}}background:var(--navy);"></div>
+      <div style="{{''}}font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
                   text-transform:uppercase; color:var(--text-muted); margin-bottom:.3rem;">Total</div>
       <div class="kpi-num" data-val="{{ total_prestamos }}"
-           style="font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
+           style="{{''}}font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
                   color:var(--text-main); line-height:1;">0</div>
-      <div style="font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">solicitados</div>
+      <div style="{{''}}font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">solicitados</div>
     </div>
   </div>
 
   <div class="col-6 col-md col-lg">
-    <div class="card h-100 kpi-usr" style="padding:.9rem 1rem;" data-delay="80">
-      <div class="kpi-bar" style="background:#3a7a42;"></div>
-      <div style="font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
+    <div class="card h-100 kpi-usr" style="{{''}}padding:.9rem 1rem;" data-delay="80">
+      <div class="kpi-bar" style="{{''}}background:#3a7a42;"></div>
+      <div style="{{''}}font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
                   text-transform:uppercase; color:var(--text-muted); margin-bottom:.3rem;">Activos</div>
       <div class="kpi-num" data-val="{{ prestamos_activos|length }}"
-           style="font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
+           style="{{''}}font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
                   color:var(--sage); line-height:1;">0</div>
-      <div style="font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">en tu poder</div>
+      <div style="{{''}}font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">en tu poder</div>
     </div>
   </div>
 
   <div class="col-6 col-md col-lg">
-    <div class="card h-100 kpi-usr" style="padding:.9rem 1rem;" data-delay="160">
-      <div class="kpi-bar" style="background:#2e7d6b;"></div>
-      <div style="font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
+    <div class="card h-100 kpi-usr" style="{{''}}padding:.9rem 1rem;" data-delay="160">
+      <div class="kpi-bar" style="{{''}}background:#2e7d6b;"></div>
+      <div style="{{''}}font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
                   text-transform:uppercase; color:var(--text-muted); margin-bottom:.3rem;">Devueltos</div>
       <div class="kpi-num" data-val="{{ historial_reciente|length }}"
-           style="font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
+           style="{{''}}font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
                   color:var(--navy); line-height:1;">0</div>
-      <div style="font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">completados</div>
+      <div style="{{''}}font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">completados</div>
     </div>
   </div>
 
   <div class="col-6 col-md col-lg">
-    <div class="card h-100 kpi-usr" style="padding:.9rem 1rem; {% if vencidos_count > 0 %}border-color:rgba(152,71,62,.35);{% endif %}" data-delay="240">
-      <div class="kpi-bar" style="background:var(--rust);"></div>
-      <div style="font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
+    <div class="card h-100 kpi-usr" style="{{''}}padding:.9rem 1rem; {% if vencidos_count > 0 %}border-color:rgba(152,71,62,.35);{% endif %}" data-delay="240">
+      <div class="kpi-bar" style="{{''}}background:var(--rust);"></div>
+      <div style="{{''}}font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
                   text-transform:uppercase; color:var(--text-muted); margin-bottom:.3rem;">Vencidos</div>
       <div class="kpi-num" data-val="{{ vencidos_count }}"
-           style="font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
+           style="{{''}}font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
                   color:{% if vencidos_count > 0 %}var(--rust){% else %}var(--text-main){% endif %}; line-height:1;">0</div>
-      <div style="font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">requieren atención</div>
+      <div style="{{''}}font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">requieren atención</div>
     </div>
   </div>
 
   <div class="col-6 col-md col-lg">
-    <div class="card h-100 kpi-usr" style="padding:.9rem 1rem;" data-delay="320">
-      <div class="kpi-bar" style="background:#c4900a;"></div>
-      <div style="font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
+    <div class="card h-100 kpi-usr" style="{{''}}padding:.9rem 1rem;" data-delay="320">
+      <div class="kpi-bar" style="{{''}}background:#c4900a;"></div>
+      <div style="{{''}}font-family:var(--font-mono); font-size:.58rem; letter-spacing:.12em;
                   text-transform:uppercase; color:var(--text-muted); margin-bottom:.3rem;">Tasa devolución</div>
 
       {# Calcular tasa de devolución #}
@@ -137,9 +137,9 @@
       {% endif %}
 
       <div class="kpi-num" data-val="{{ tasa_devolucion|default:0 }}"
-           style="font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
+           style="{{''}}font-family:var(--font-mono); font-size:1.55rem; font-weight:700;
                   color:var(--sage); line-height:1;">0</div>
-      <div style="font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">% completados</div>
+      <div style="{{''}}font-size:.72rem; color:var(--text-muted); margin-top:.25rem;">% completados</div>
     </div>
   </div>
 
@@ -161,30 +161,30 @@
           Estado de mis préstamos
         </span>
       </div>
-      <div class="card-body d-flex flex-column align-items-center justify-content-center" style="padding:1.25rem; min-height:240px;">
-        <div style="position:relative; width:170px; height:170px; margin-bottom:1rem;">
+      <div class="card-body d-flex flex-column align-items-center justify-content-center" style="{{''}}padding:1.25rem; min-height:240px;">
+        <div style="{{''}}position:relative; width:170px; height:170px; margin-bottom:1rem;">
           <canvas id="donutEstados" width="170" height="170"></canvas>
-          <div id="donut-center" style="position:absolute; inset:0; display:flex;
+          <div id="donut-center" style="{{''}}position:absolute; inset:0; display:flex;
                 flex-direction:column; align-items:center; justify-content:center;
                 pointer-events:none;">
-            <span style="font-family:var(--font-mono); font-size:1.6rem; font-weight:700;
+            <span style="{{''}}font-family:var(--font-mono); font-size:1.6rem; font-weight:700;
                           color:var(--text-main); line-height:1;">{{ total_prestamos }}</span>
-            <span style="font-family:var(--font-ui); font-size:.68rem; color:var(--text-muted);
+            <span style="{{''}}font-family:var(--font-ui); font-size:.68rem; color:var(--text-muted);
                           text-transform:uppercase; letter-spacing:.07em;">total</span>
           </div>
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center;">
-          <span class="donut-legend" style="background:rgba(9,77,146,.12); color:var(--navy); border-color:rgba(9,77,146,.25);">
-            <span class="dot" style="background:var(--navy);"></span>Activos: <strong>{{ prestamos_activos|length }}</strong>
+        <div style="{{''}}display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center;">
+          <span class="donut-legend" style="{{''}}background:rgba(9,77,146,.12); color:var(--navy); border-color:rgba(9,77,146,.25);">
+            <span class="dot" style="{{''}}background:var(--navy);"></span>Activos: <strong>{{ prestamos_activos|length }}</strong>
           </span>
-          <span class="donut-legend" style="background:rgba(58,122,66,.1); color:#2b5430; border-color:rgba(58,122,66,.2);">
-            <span class="dot" style="background:#3a7a42;"></span>Devueltos: <strong>{{ historial_reciente|length }}</strong>
+          <span class="donut-legend" style="{{''}}background:rgba(58,122,66,.1); color:#2b5430; border-color:rgba(58,122,66,.2);">
+            <span class="dot" style="{{''}}background:#3a7a42;"></span>Devueltos: <strong>{{ historial_reciente|length }}</strong>
           </span>
-          <span class="donut-legend" style="background:rgba(152,71,62,.1); color:#6e2020; border-color:rgba(152,71,62,.2);">
-            <span class="dot" style="background:var(--rust);"></span>Vencidos: <strong>{{ vencidos_count }}</strong>
+          <span class="donut-legend" style="{{''}}background:rgba(152,71,62,.1); color:#6e2020; border-color:rgba(152,71,62,.2);">
+            <span class="dot" style="{{''}}background:var(--rust);"></span>Vencidos: <strong>{{ vencidos_count }}</strong>
           </span>
-          <span class="donut-legend" style="background:rgba(196,144,10,.1); color:#7a5500; border-color:rgba(196,144,10,.2);">
-            <span class="dot" style="background:#c4900a;"></span>Pendientes: <strong>
+          <span class="donut-legend" style="{{''}}background:rgba(196,144,10,.1); color:#7a5500; border-color:rgba(196,144,10,.2);">
+            <span class="dot" style="{{''}}background:#c4900a;"></span>Pendientes: <strong>
               {% with pendientes=all_prestamos|length %}
                 {{ pendientes|add:0 }}
               {% endwith %}
@@ -208,10 +208,10 @@
           </svg>
           Actividad — últimos 6 meses
         </span>
-        <span style="font-family:var(--font-mono); font-size:.65rem; color:var(--text-muted);">préstamos</span>
+        <span style="{{''}}font-family:var(--font-mono); font-size:.65rem; color:var(--text-muted);">préstamos</span>
       </div>
-      <div class="card-body" style="padding:1rem 1.2rem; min-height:240px; display:flex; align-items:center;">
-        <canvas id="barActividad" style="width:100%; max-height:200px;"></canvas>
+      <div class="card-body" style="{{''}}padding:1rem 1.2rem; min-height:240px; display:flex; align-items:center;">
+        <canvas id="barActividad" style="{{''}}width:100%; max-height:200px;"></canvas>
       </div>
     </div>
   </div>
@@ -233,75 +233,75 @@
           Métricas personales
         </span>
       </div>
-      <div class="card-body" style="padding:1.1rem 1.2rem;">
+      <div class="card-body" style="{{''}}padding:1.1rem 1.2rem;">
 
         {# Tasa de devolución a tiempo #}
-        <div style="margin-bottom:1.1rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem;">
-            <span style="font-size:.8rem; font-family:var(--font-ui); color:var(--text-main); font-weight:600;">
+        <div style="{{''}}margin-bottom:1.1rem;">
+          <div style="{{''}}display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem;">
+            <span style="{{''}}font-size:.8rem; font-family:var(--font-ui); color:var(--text-main); font-weight:600;">
               Tasa de devolución
             </span>
-            <span style="font-family:var(--font-mono); font-size:.8rem; font-weight:700; color:var(--sage);" id="pct-devolucion">
+            <span style="{{''}}font-family:var(--font-mono); font-size:.8rem; font-weight:700; color:var(--sage);" id="pct-devolucion">
               {% if total_prestamos > 0 %}
                 {% widthratio historial_reciente|length total_prestamos 100 %}%
               {% else %}0%{% endif %}
             </span>
           </div>
-          <div style="height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
-            <div id="bar-devolucion" style="height:100%; background:var(--sage); border-radius:3px; width:0; transition:width 1.2s ease .4s;"></div>
+          <div style="{{''}}height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
+            <div id="bar-devolucion" style="{{''}}height:100%; background:var(--sage); border-radius:3px; width:0; transition:width 1.2s ease .4s;"></div>
           </div>
-          <div style="font-size:.7rem; color:var(--text-muted); margin-top:.25rem;">
+          <div style="{{''}}font-size:.7rem; color:var(--text-muted); margin-top:.25rem;">
             {{ historial_reciente|length }} de {{ total_prestamos }} devueltos a tiempo
           </div>
         </div>
 
         {# Herramientas en uso #}
-        <div style="margin-bottom:1.1rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem;">
-            <span style="font-size:.8rem; font-family:var(--font-ui); color:var(--text-main); font-weight:600;">
+        <div style="{{''}}margin-bottom:1.1rem;">
+          <div style="{{''}}display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem;">
+            <span style="{{''}}font-size:.8rem; font-family:var(--font-ui); color:var(--text-main); font-weight:600;">
               Herramientas activas
             </span>
-            <span style="font-family:var(--font-mono); font-size:.8rem; font-weight:700; color:var(--navy);" id="pct-activos">
+            <span style="{{''}}font-family:var(--font-mono); font-size:.8rem; font-weight:700; color:var(--navy);" id="pct-activos">
               {% if total_prestamos > 0 %}
                 {% widthratio prestamos_activos|length total_prestamos 100 %}%
               {% else %}0%{% endif %}
             </span>
           </div>
-          <div style="height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
-            <div id="bar-activos" style="height:100%; background:var(--navy); border-radius:3px; width:0; transition:width 1.2s ease .6s;"></div>
+          <div style="{{''}}height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
+            <div id="bar-activos" style="{{''}}height:100%; background:var(--navy); border-radius:3px; width:0; transition:width 1.2s ease .6s;"></div>
           </div>
-          <div style="font-size:.7rem; color:var(--text-muted); margin-top:.25rem;">
+          <div style="{{''}}font-size:.7rem; color:var(--text-muted); margin-top:.25rem;">
             {{ prestamos_activos|length }} préstamo{{ prestamos_activos|length|pluralize }} en curso
           </div>
         </div>
 
         {# Vencidos vs total #}
-        <div style="margin-bottom:1.1rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem;">
-            <span style="font-size:.8rem; font-family:var(--font-ui); color:var(--text-main); font-weight:600;">
+        <div style="{{''}}margin-bottom:1.1rem;">
+          <div style="{{''}}display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem;">
+            <span style="{{''}}font-size:.8rem; font-family:var(--font-ui); color:var(--text-main); font-weight:600;">
               Índice de incidencias
             </span>
-            <span style="font-family:var(--font-mono); font-size:.8rem; font-weight:700;
+            <span style="{{''}}font-family:var(--font-mono); font-size:.8rem; font-weight:700;
                           color:{% if vencidos_count > 0 %}var(--rust){% else %}var(--sage){% endif %};" id="pct-vencidos">
               {% if total_prestamos > 0 %}
                 {% widthratio vencidos_count total_prestamos 100 %}%
               {% else %}0%{% endif %}
             </span>
           </div>
-          <div style="height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
-            <div id="bar-vencidos" style="height:100%; background:{% if vencidos_count > 0 %}var(--rust){% else %}var(--sage){% endif %}; border-radius:3px; width:0; transition:width 1.2s ease .8s;"></div>
+          <div style="{{''}}height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
+            <div id="bar-vencidos" style="{{''}}height:100%; background:{% if vencidos_count > 0 %}var(--rust){% else %}var(--sage){% endif %}; border-radius:3px; width:0; transition:width 1.2s ease .8s;"></div>
           </div>
-          <div style="font-size:.7rem; color:var(--text-muted); margin-top:.25rem;">
+          <div style="{{''}}font-size:.7rem; color:var(--text-muted); margin-top:.25rem;">
             {{ vencidos_count }} vencido{{ vencidos_count|pluralize }} de {{ total_prestamos }} préstamos
           </div>
         </div>
 
         {# Separador #}
-        <hr style="border-color:var(--border-color); margin:.75rem 0;">
+        <hr style="{{''}}border-color:var(--border-color); margin:.75rem 0;">
 
         {# Info card inventario #}
-        <div style="display:flex; gap:.75rem; align-items:center;">
-          <div style="width:38px; height:38px; border-radius:var(--radius-md);
+        <div style="{{''}}display:flex; gap:.75rem; align-items:center;">
+          <div style="{{''}}width:38px; height:38px; border-radius:var(--radius-md);
                       background:rgba(9,77,146,.08); border:1px solid rgba(9,77,146,.15);
                       display:flex; align-items:center; justify-content:center; flex-shrink:0;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2">
@@ -309,10 +309,10 @@
             </svg>
           </div>
           <div>
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:.85rem; color:var(--text-main);">
+            <div style="{{''}}font-family:var(--font-ui); font-weight:700; font-size:.85rem; color:var(--text-main);">
               Herramientas disponibles
             </div>
-            <div style="font-family:var(--font-mono); font-size:.78rem; color:var(--navy);">
+            <div style="{{''}}font-family:var(--font-mono); font-size:.78rem; color:var(--navy);">
               {{ productos_disponibles|length }} en stock actualmente
             </div>
           </div>
@@ -332,10 +332,10 @@
           </svg>
           Préstamos activos y recientes
         </span>
-        <a href="{% url 'prestamo_usuario' %}" class="btn-ghost" style="font-size:.75rem;">Ver todos</a>
+        <a href="{% url 'prestamo_usuario' %}" class="btn-ghost" style="{{''}}font-size:.75rem;">Ver todos</a>
       </div>
       <div class="table-responsive">
-        <table class="table-app datatable-disabled" style="width:100%; border-collapse:collapse; font-size:.86rem;">
+        <table class="table-app datatable-disabled" style="{{''}}width:100%; border-collapse:collapse; font-size:.86rem;">
           <thead>
             <tr>
               <th>#</th>
@@ -349,22 +349,22 @@
             {% for p in all_prestamos|slice:":8" %}
             <tr>
               <td>
-                <span style="font-family:var(--font-mono); font-size:.75rem; color:var(--text-muted);">#{{ p.pk }}</span>
+                <span style="{{''}}font-family:var(--font-mono); font-size:.75rem; color:var(--text-muted);">#{{ p.pk }}</span>
               </td>
               <td>
                 {% for item in p.items.all|slice:":2" %}
-                  <div style="font-weight:600; font-size:.82rem; color:var(--text-main);">{{ item.producto.nombre }}</div>
+                  <div style="{{''}}font-weight:600; font-size:.82rem; color:var(--text-main);">{{ item.producto.nombre }}</div>
                 {% endfor %}
                 {% if p.items.count > 2 %}
-                  <span style="font-size:.7rem; color:var(--text-muted);">+{{ p.items.count|add:"-2" }} más</span>
+                  <span style="{{''}}font-size:.7rem; color:var(--text-muted);">+{{ p.items.count|add:"-2" }} más</span>
                 {% endif %}
               </td>
               <td>
                 {% if p.estado == 'activo' %}
                   <span class="badge-state badge-aprobada">Activo</span>
                 {% elif p.estado == 'devuelto' %}
-                  <span class="badge-state" style="background:rgba(9,77,146,.1); color:var(--navy);">
-                    <span style="width:5px;height:5px;border-radius:50%;background:var(--navy);display:inline-block;"></span>
+                  <span class="badge-state" style="{{''}}background:rgba(9,77,146,.1); color:var(--navy);">
+                    <span style="{{''}}width:5px;height:5px;border-radius:50%;background:var(--navy);display:inline-block;"></span>
                     Devuelto
                   </span>
                 {% elif p.estado == 'vencido' %}
@@ -379,31 +379,31 @@
               </td>
               <td>
                 {% if p.fecha_vencimiento %}
-                  <span style="font-family:var(--font-mono); font-size:.75rem;
+                  <span style="{{''}}font-family:var(--font-mono); font-size:.75rem;
                     {% if p.urgencia == 'vencido' %}color:var(--rust); font-weight:700;
                     {% elif p.urgencia == 'proximo' %}color:#c4900a;
                     {% else %}color:var(--text-muted);{% endif %}">
                     {{ p.fecha_vencimiento|date:"d/m/Y" }}
                     {% if p.dias_restantes is not None and p.dias_restantes >= 0 %}
-                      <br><span style="font-size:.65rem; opacity:.7;">({{ p.dias_restantes }}d)</span>
+                      <br><span style="{{''}}font-size:.65rem; opacity:.7;">({{ p.dias_restantes }}d)</span>
                     {% elif p.dias_restantes is not None and p.dias_restantes < 0 %}
-                      <br><span style="font-size:.65rem; font-weight:700;">Venció</span>
+                      <br><span style="{{''}}font-size:.65rem; font-weight:700;">Venció</span>
                     {% endif %}
                   </span>
                 {% else %}
-                  <span style="color:var(--text-muted); font-size:.8rem;">—</span>
+                  <span style="{{''}}color:var(--text-muted); font-size:.8rem;">—</span>
                 {% endif %}
               </td>
-              <td style="min-width:80px;">
+              <td style="{{''}}min-width:80px;">
                 {# Mini barra de progreso de devolución del préstamo #}
                 {% with total_items=p.items.count devueltos=p.items.all %}
                   {% with dev_count=0 %}
-                    <div style="height:4px; background:var(--border-color); border-radius:2px; overflow:hidden;">
-                      <div style="height:100%; background:{% if p.estado == 'devuelto' %}var(--sage){% elif p.estado == 'vencido' %}var(--rust){% elif p.estado == 'parcial' %}#c4900a{% else %}var(--navy){% endif %};
+                    <div style="{{''}}height:4px; background:var(--border-color); border-radius:2px; overflow:hidden;">
+                      <div style="{{''}}height:100%; background:{% if p.estado == 'devuelto' %}var(--sage){% elif p.estado == 'vencido' %}var(--rust){% elif p.estado == 'parcial' %}#c4900a{% else %}var(--navy){% endif %};
                                   width:{% if p.estado == 'devuelto' %}100{% elif p.estado == 'activo' or p.estado == 'pendiente' %}15{% elif p.estado == 'parcial' %}50{% elif p.estado == 'vencido' %}100{% else %}0{% endif %}%;
                                   border-radius:2px;"></div>
                     </div>
-                    <div style="font-size:.65rem; color:var(--text-muted); margin-top:.2rem; font-family:var(--font-mono);">
+                    <div style="{{''}}font-size:.65rem; color:var(--text-muted); margin-top:.2rem; font-family:var(--font-mono);">
                       {% if p.estado == 'devuelto' %}completo
                       {% elif p.estado == 'parcial' %}parcial
                       {% elif p.estado == 'activo' %}en uso
@@ -417,8 +417,8 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="5" style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" style="opacity:.3; display:block; margin:0 auto .5rem;">
+              <td colspan="5" style="{{''}}text-align:center; padding:3rem 1rem; color:var(--text-muted);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" style="{{''}}opacity:.3; display:block; margin:0 auto .5rem;">
                   <polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>
                 </svg>
                 No tienes préstamos registrados aún.
@@ -446,21 +446,21 @@
           </svg>
           Historial de actividad reciente
         </span>
-        <span style="font-family:var(--font-mono); font-size:.7rem; color:var(--text-muted);">
+        <span style="{{''}}font-family:var(--font-mono); font-size:.7rem; color:var(--text-muted);">
           últimos 5 registros
         </span>
       </div>
-      <div class="card-body" style="padding:1rem 1.4rem;">
+      <div class="card-body" style="{{''}}padding:1rem 1.4rem;">
         {% if all_prestamos %}
-        <div style="position:relative; padding-left:1.5rem;">
+        <div style="{{''}}position:relative; padding-left:1.5rem;">
           {# Línea vertical del timeline #}
-          <div style="position:absolute; left:6px; top:0; bottom:0; width:1.5px; background:var(--border-color);"></div>
+          <div style="{{''}}position:absolute; left:6px; top:0; bottom:0; width:1.5px; background:var(--border-color);"></div>
 
           {% for p in all_prestamos|slice:":5" %}
-          <div class="timeline-item" style="position:relative; margin-bottom:1.1rem; padding-bottom:1.1rem;
+          <div class="timeline-item" style="{{''}}position:relative; margin-bottom:1.1rem; padding-bottom:1.1rem;
                                             border-bottom:1px solid var(--border-color);">
             {# Punto de la línea de tiempo #}
-            <div style="position:absolute; left:-1.5rem; top:.15rem; width:13px; height:13px;
+            <div style="{{''}}position:absolute; left:-1.5rem; top:.15rem; width:13px; height:13px;
                         border-radius:50%; border:2px solid
                         {% if p.estado == 'devuelto' %}var(--sage)
                         {% elif p.estado == 'vencido' %}var(--rust)
@@ -469,21 +469,21 @@
                         background:var(--bg-surface);"></div>
 
             <div class="d-flex align-items-start justify-content-between gap-2 flex-wrap">
-              <div style="flex:1; min-width:0;">
-                <div style="font-family:var(--font-ui); font-weight:700; font-size:.88rem;
+              <div style="{{''}}flex:1; min-width:0;">
+                <div style="{{''}}font-family:var(--font-ui); font-weight:700; font-size:.88rem;
                              color:var(--text-main); margin-bottom:.2rem;">
                   Préstamo #{{ p.pk }}
                   {% if p.estado == 'devuelto' %}
-                    <span style="color:var(--sage); font-size:.75rem; font-weight:600; margin-left:.4rem;">✓ devuelto</span>
+                    <span style="{{''}}color:var(--sage); font-size:.75rem; font-weight:600; margin-left:.4rem;">✓ devuelto</span>
                   {% elif p.estado == 'vencido' %}
-                    <span style="color:var(--rust); font-size:.75rem; font-weight:600; margin-left:.4rem;">⚠ vencido</span>
+                    <span style="{{''}}color:var(--rust); font-size:.75rem; font-weight:600; margin-left:.4rem;">⚠ vencido</span>
                   {% elif p.estado == 'pendiente' %}
-                    <span style="color:#c4900a; font-size:.75rem; font-weight:600; margin-left:.4rem;">⏳ pendiente</span>
+                    <span style="{{''}}color:#c4900a; font-size:.75rem; font-weight:600; margin-left:.4rem;">⏳ pendiente</span>
                   {% endif %}
                 </div>
-                <div style="display:flex; flex-wrap:wrap; gap:.22rem; margin-bottom:.2rem;">
+                <div style="{{''}}display:flex; flex-wrap:wrap; gap:.22rem; margin-bottom:.2rem;">
                   {% for item in p.items.all %}
-                  <span style="font-size:.72rem; padding:.08rem .42rem; border-radius:10px;
+                  <span style="{{''}}font-size:.72rem; padding:.08rem .42rem; border-radius:10px;
                                background:rgba(9,77,146,.07); color:var(--navy);
                                font-family:var(--font-ui); font-weight:600;">
                     {{ item.producto.nombre }} ×{{ item.cantidad }}
@@ -491,17 +491,17 @@
                   {% endfor %}
                 </div>
                 {% if p.observaciones %}
-                <div style="font-size:.78rem; color:var(--text-muted); font-family:var(--font-ui);">
+                <div style="{{''}}font-size:.78rem; color:var(--text-muted); font-family:var(--font-ui);">
                   {{ p.observaciones|truncatechars:80 }}
                 </div>
                 {% endif %}
               </div>
-              <div style="text-align:right; flex-shrink:0;">
-                <div style="font-family:var(--font-mono); font-size:.72rem; color:var(--text-muted);">
+              <div style="{{''}}text-align:right; flex-shrink:0;">
+                <div style="{{''}}font-family:var(--font-mono); font-size:.72rem; color:var(--text-muted);">
                   {{ p.fecha_prestamo|date:"d/m/Y" }}
                 </div>
                 {% if p.fecha_vencimiento %}
-                <div style="font-family:var(--font-mono); font-size:.7rem;
+                <div style="{{''}}font-family:var(--font-mono); font-size:.7rem;
                              color:{% if p.urgencia == 'vencido' %}var(--rust){% elif p.urgencia == 'proximo' %}#c4900a{% else %}var(--text-muted){% endif %};">
                   vence {{ p.fecha_vencimiento|date:"d/m/Y" }}
                 </div>
@@ -512,8 +512,8 @@
           {% endfor %}
 
           {% if all_prestamos|length > 5 %}
-          <div style="text-align:center; padding-top:.5rem;">
-            <a href="{% url 'prestamo_usuario' %}" class="btn-outline-mine" style="font-size:.8rem;">
+          <div style="{{''}}text-align:center; padding-top:.5rem;">
+            <a href="{% url 'prestamo_usuario' %}" class="btn-outline-mine" style="{{''}}font-size:.8rem;">
               Ver todos los {{ total_prestamos }} préstamos →
             </a>
           </div>
@@ -521,12 +521,12 @@
 
         </div>
         {% else %}
-        <div style="text-align:center; padding:2.5rem 1rem; color:var(--text-muted);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" style="opacity:.3; display:block; margin:0 auto .6rem;">
+        <div style="{{''}}text-align:center; padding:2.5rem 1rem; color:var(--text-muted);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" style="{{''}}opacity:.3; display:block; margin:0 auto .6rem;">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
-          <div style="font-family:var(--font-ui); font-size:.88rem;">No hay actividad registrada aún.</div>
-          <a href="{% url 'prestamo_usuario' %}" class="btn-primary-mine" style="margin-top:.85rem; display:inline-flex;">
+          <div style="{{''}}font-family:var(--font-ui); font-size:.88rem;">No hay actividad registrada aún.</div>
+          <a href="{% url 'prestamo_usuario' %}" class="btn-primary-mine" style="{{''}}margin-top:.85rem; display:inline-flex;">
             Solicitar mi primer préstamo
           </a>
         </div>

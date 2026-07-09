@@ -16,7 +16,7 @@
       <div class="brand-sub">Centro Minero · Regional Boyacá · SENA</div>
     </div>
     <div class="left-content img-container-center">
-      <img src="{% static 'img/fondo.png' %}" alt="Campus SENA Centro Minero" />
+      <img loading="lazy"  src="{% static 'img/fondo.png' %}" alt="Campus SENA Centro Minero" />
     </div>
     <div class="left-content">
       <span class="corner-note">Inventory </span>
@@ -27,7 +27,7 @@
 
     <div class="logo-row">
       <div class="logo-box">
-        <img src="{% static 'img/Logo-del-sena-Verde-150x150-removebg-preview.png' %}" alt="SENA" />
+        <img loading="lazy"  src="{% static 'img/Logo-del-sena-Verde-150x150-removebg-preview.png' %}" alt="SENA" />
       </div>
       <div>
         <div class="logo-sup">Centro Minero · SENA</div>
@@ -72,7 +72,7 @@
         <span class="field-lbl">Documento</span>
         <input type="hidden" id="tipo_documento" name="tipo_documento" value="{{ tipo_documento|default:'CC' }}" />
         <div class="input-group-mine">
-          <div style="position:relative;">
+          <div style="{{''}}position:relative;">
             <button type="button" class="sel-btn" id="doc-tipo-btn">{{ tipo_documento|default:'CC' }} ▾</button>
             <div class="doc-dropdown" id="docDropdown">
               <a href="#" data-value="CC">CC – Cédula de Ciudadanía</a>

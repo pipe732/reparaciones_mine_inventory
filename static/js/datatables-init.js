@@ -9,6 +9,7 @@ window.registrarExportacion = function (modulo, formato, totalRegistros) {
     if (match) csrfToken = match[1];
   }
 
+  // Mostrar estado de carga si fuera necesario (loading spinner / spinner-border)
   $.ajax({
     url: '/reportes/registrar-exportacion/',
     type: 'POST',
@@ -24,6 +25,8 @@ window.registrarExportacion = function (modulo, formato, totalRegistros) {
     error: function (xhr, status, error) {
       console.error('Error al registrar exportación:', error);
     }
+  }).catch(function (error) {
+    console.error('Error capturado con catch:', error);
   });
 };
 
